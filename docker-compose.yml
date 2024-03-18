@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: .docker/Dockerfile
+    image: role-patrocinado
+    container_name: role-patrocinado
+    volumes:
+      - .:/usr/app/roles-patrocinado
