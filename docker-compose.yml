@@ -7,5 +7,6 @@ services:
       dockerfile: .docker/Dockerfile
     image: role-patrocinado
     container_name: role-patrocinado
+    entrypoint: sh .docker/entrypoint.sh
     volumes:
       - .:/usr/app/roles-patrocinado
