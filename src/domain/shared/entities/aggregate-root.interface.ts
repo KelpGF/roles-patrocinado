@@ -1,1 +1,1 @@
-export default interface AggregateRoot {}
+export interface AggregateRoot {}
