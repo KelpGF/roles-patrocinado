@@ -1,6 +1,6 @@
 import { Either } from "../shared/either";
 import { DomainError, InfraError } from "../shared/errors";
-import { UseCase } from "./usecase.interface";
+import { UseCase } from "../shared/usecase";
 
 export interface CreateWalkwayUseCaseInterface
   extends UseCase<
@@ -13,6 +13,8 @@ export namespace CreateWalkwayUseCaseInterface {
     name: string;
     date: Date;
     serviceCharge: number;
+    membersId: string[];
+    sponsorsId: string[];
   };
   export type Output = Either<(InfraError | DomainError)[], string>;
 }
