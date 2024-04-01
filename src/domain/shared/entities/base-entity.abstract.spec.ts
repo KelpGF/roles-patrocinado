@@ -31,4 +31,11 @@ describe("BaseEntity", () => {
     expect(entity.createdAt()).toEqual(params.createdAt);
     expect(entity.updatedAt()).toEqual(params.updatedAt);
   });
+
+  test("should return a list of notifications and messages", () => {
+    const entity = new Entity({});
+
+    expect(entity.getNotifications()).toEqual([]);
+    expect(entity.getMessages()).toEqual([]);
+  });
 });
