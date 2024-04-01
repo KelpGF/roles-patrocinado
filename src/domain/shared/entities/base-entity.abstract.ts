@@ -24,6 +24,18 @@ export abstract class BaseEntityAbstract {
     return this._id.value;
   }
 
+  getNotifications() {
+    return this._notification.getNotifications();
+  }
+
+  getNotificationsMessages() {
+    return this._notification.getMessages();
+  }
+
+  hasNotification() {
+    return this._notification.hasNotification();
+  }
+
   createdAt(): Date {
     return this._createdAt;
   }

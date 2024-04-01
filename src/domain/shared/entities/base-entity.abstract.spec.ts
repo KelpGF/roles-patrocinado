@@ -32,10 +32,31 @@ describe("BaseEntity", () => {
     expect(entity.updatedAt()).toEqual(params.updatedAt);
   });
 
-  test("should return a list of notifications and messages", () => {
+  test("shouldn't has notifications", () => {
     const entity = new Entity({});
 
     expect(entity.getNotifications()).toEqual([]);
-    expect(entity.getMessages()).toEqual([]);
+    expect(entity.getNotificationsMessages()).toEqual([]);
+    expect(entity.hasNotification()).toBe(false);
+  });
+
+  test("should has notifications", () => {
+    class OtherEntity extends BaseEntityAbstract {
+      constructor() {
+        super({});
+        this._notification.addNotification({
+          context: "Entity",
+          message: "Error message",
+        });
+      }
+    }
+
+    const entity = new OtherEntity();
+
+    expect(entity.getNotifications()).toHaveLength(1);
+    expect(entity.getNotificationsMessages()).toEqual([
+      "Entity: Error message",
+    ]);
+    expect(entity.hasNotification()).toBe(true);
   });
 });
