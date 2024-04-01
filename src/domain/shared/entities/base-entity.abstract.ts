@@ -1,16 +1,22 @@
 import { Notification, NotificationInterface } from "../notification";
 import IdVo from "../value-object/uuid.vo";
 
+export type Params = {
+  id?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
 export abstract class BaseEntityAbstract {
   protected _id: IdVo;
   protected _createdAt: Date;
   protected _updatedAt: Date;
   protected _notification: NotificationInterface;
 
-  constructor(id: string) {
-    this._id = new IdVo(id);
-    this._createdAt = new Date();
-    this._updatedAt = new Date();
+  constructor(params: Params) {
+    this._id = new IdVo(params.id);
+    this._createdAt = params.createdAt || new Date();
+    this._updatedAt = params.updatedAt || new Date();
     this._notification = new Notification();
   }
 
