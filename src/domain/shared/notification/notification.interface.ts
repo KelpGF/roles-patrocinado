@@ -1,6 +1,6 @@
 export type NotificationItemType = {
   context: string;
-  message: string;
+  notification: Error;
 };
 
 export interface NotificationInterface {

@@ -16,7 +16,7 @@ export class Notification implements NotificationInterface {
 
   getMessages(): string[] {
     return this.notifications.map(
-      (notification) => `${notification.context}: ${notification.message}`,
+      (item) => `${item.context}: ${item.notification.message}`,
     );
   }
 

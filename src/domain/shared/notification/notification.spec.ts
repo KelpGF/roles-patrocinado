@@ -11,17 +11,17 @@ describe("Notification", () => {
 
   test("should add a new message to the notification", () => {
     const notification = new Notification();
-    const message = "A new message";
+    const error = new Error("A new message");
 
     notification.addNotification({
       context: "context",
-      message,
+      notification: error,
     });
 
     expect(notification.hasNotification()).toBe(true);
     expect(notification.getMessages()).toEqual(["context: A new message"]);
     expect(notification.getNotifications()).toEqual([
-      { context: "context", message },
+      { context: "context", notification: error },
     ]);
   });
 
@@ -30,11 +30,11 @@ describe("Notification", () => {
 
     notification.addNotification({
       context: "context",
-      message: "A new message",
+      notification: new Error("A new message"),
     });
     notification.addNotification({
       context: "context1",
-      message: "Another message",
+      notification: new Error("Another message"),
     });
 
     expect(notification.hasNotification()).toBe(true);
@@ -43,8 +43,8 @@ describe("Notification", () => {
       "context1: Another message",
     ]);
     expect(notification.getNotifications()).toEqual([
-      { context: "context", message: "A new message" },
-      { context: "context1", message: "Another message" },
+      { context: "context", notification: new Error("A new message") },
+      { context: "context1", notification: new Error("Another message") },
     ]);
   });
 });

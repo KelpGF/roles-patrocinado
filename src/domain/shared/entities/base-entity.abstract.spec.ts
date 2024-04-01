@@ -46,7 +46,7 @@ describe("BaseEntity", () => {
         super({});
         this._notification.addNotification({
           context: "Entity",
-          message: "Error message",
+          notification: new Error("Error message"),
         });
       }
     }
