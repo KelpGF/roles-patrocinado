@@ -31,10 +31,10 @@ describe("Domain shared errors", () => {
 
     expect(error).toBeInstanceOf(InvalidParamError);
     expect(error.message).toBe(`Param ${paramName} is invalid`);
-    expect(error.name).toBe("InvalidParamError");
+    expect(error.name).toBe("DomainError");
 
     expect(error2).toBeInstanceOf(InvalidParamError);
     expect(error2.message).toBe(`Param ${paramName} is required`);
-    expect(error2.name).toBe("InvalidParamError");
+    expect(error2.name).toBe("DomainError");
   });
 });

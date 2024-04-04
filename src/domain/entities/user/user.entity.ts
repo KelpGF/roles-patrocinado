@@ -12,11 +12,12 @@ type Params = {
 export class UserEntity extends BaseEntityAbstract implements AggregateRoot {
   private _name: string;
 
-  constructor(params: Params) {
+  private constructor(params: Params) {
     super({
       id: params.id,
       createdAt: params.createdAt,
       updatedAt: params.updatedAt,
+      context: "User",
     });
     this._name = params.name;
     this.validate();
@@ -28,19 +29,15 @@ export class UserEntity extends BaseEntityAbstract implements AggregateRoot {
 
   private validate() {
     if (this._name.length < 3) {
-      this._notification.addNotification({
-        context: "User",
-        notification: new InvalidParamError(
-          "name",
-          `'${this._name}' has less 3 characters`,
-        ),
-      });
+      this.addNotification(
+        new InvalidParamError("name", `'${this._name}' has less 3 characters`),
+      );
     }
   }
 
   static create(params: Params) {
     const entity = new UserEntity(params);
-    const isValid = entity.hasNotification();
+    const isValid = !entity.hasNotification();
 
     return { user: entity, isValid };
   }

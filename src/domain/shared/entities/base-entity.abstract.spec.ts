@@ -1,5 +1,6 @@
 import { v4 as uuid } from "uuid";
 import { BaseEntityAbstract } from "./base-entity.abstract";
+import { DomainError } from "../errors";
 
 describe("BaseEntity", () => {
   class Entity extends BaseEntityAbstract {}
@@ -9,7 +10,7 @@ describe("BaseEntity", () => {
   });
 
   test("should create a new instance of BaseEntity with new values", () => {
-    const entity = new Entity({});
+    const entity = new Entity({ context: "Entity" });
 
     expect(entity.id()).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
@@ -23,6 +24,7 @@ describe("BaseEntity", () => {
       id: uuid(),
       createdAt: new Date("2024-01-01T10:10:10Z"),
       updatedAt: new Date("2024-01-01T20:20:20Z"),
+      context: "Entity",
     };
 
     const entity = new Entity(params);
@@ -33,7 +35,7 @@ describe("BaseEntity", () => {
   });
 
   test("shouldn't has notifications", () => {
-    const entity = new Entity({});
+    const entity = new Entity({ context: "Entity" });
 
     expect(entity.getNotifications()).toEqual([]);
     expect(entity.getNotificationsMessages()).toEqual([]);
@@ -43,11 +45,8 @@ describe("BaseEntity", () => {
   test("should has notifications", () => {
     class OtherEntity extends BaseEntityAbstract {
       constructor() {
-        super({});
-        this._notification.addNotification({
-          context: "Entity",
-          notification: new Error("Error message"),
-        });
+        super({ context: "Entity" });
+        this.addNotification(new DomainError("Error message"));
       }
     }
 

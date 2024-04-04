@@ -9,7 +9,7 @@ describe("User Entity", () => {
   test("should create a new instance of UserEntity with new values", () => {
     const params = { name: "Kelvin" };
 
-    const entity = new UserEntity(params);
+    const entity = UserEntity.create(params).user;
 
     expect(entity.id()).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
@@ -47,7 +47,7 @@ describe("User Entity", () => {
     expect(user.createdAt()).toEqual(new Date("2020-01-01"));
     expect(user.updatedAt()).toEqual(new Date("2020-01-01"));
     expect(user.getName()).toBe("Ke");
-    expect(isValid).toBeTruthy();
+    expect(isValid).toBeFalsy();
     expect(user.getNotifications()).toEqual([
       {
         context: "User",
