@@ -10,10 +10,9 @@ import {
   SponsorMemberEntity,
   Params as SponsorMemberEntityParams,
 } from "../entities/member/sponsor-member.entity";
+import { MembersTypeEnum } from "../shared/enum/members-type.enum";
 
-type MembersType = "member" | "sponsor" | "guest";
-
-type Params =
+export type Params =
   | MemberEntityParams
   | SponsorMemberEntityParams
   | GuestMemberEntityParams;
@@ -26,7 +25,7 @@ const memberStrategy = {
 };
 
 export default class MemberFactory {
-  static create(type: MembersType, params: Params) {
+  static create(type: MembersTypeEnum, params: Params) {
     const memberFactory = memberStrategy[type] || memberStrategy.member;
 
     const member = memberFactory(params);

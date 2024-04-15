@@ -4,6 +4,7 @@ import {
   SponsorMemberEntity,
   UserEntity,
 } from "../entities";
+import { MembersTypeEnum } from "../shared/enum/members-type.enum";
 import MemberFactory from "./member.factory";
 
 jest.mock("uuid", () => ({
@@ -21,7 +22,10 @@ describe("MemberEntity Factory", () => {
     const user = makeUserEntity();
     const params = { user };
 
-    const { member, isValid } = MemberFactory.create("member", params);
+    const { member, isValid } = MemberFactory.create(
+      MembersTypeEnum.Member,
+      params,
+    );
     const entity = new MemberEntity(params);
 
     expect(member).toBeInstanceOf(MemberEntity);
@@ -35,7 +39,10 @@ describe("MemberEntity Factory", () => {
     const user = makeUserEntity();
     const params = { user };
 
-    const { member, isValid } = MemberFactory.create("guest", params);
+    const { member, isValid } = MemberFactory.create(
+      MembersTypeEnum.Guest,
+      params,
+    );
     const entity = new GuestMemberEntity(params);
 
     expect(member).toBeInstanceOf(GuestMemberEntity);
@@ -49,7 +56,10 @@ describe("MemberEntity Factory", () => {
     const user = makeUserEntity();
     const params = { user, sponsoredValue: 100 };
 
-    const { member, isValid } = MemberFactory.create("sponsor", params);
+    const { member, isValid } = MemberFactory.create(
+      MembersTypeEnum.Sponsor,
+      params,
+    );
     const entity = new SponsorMemberEntity(params);
 
     expect(member).toBeInstanceOf(SponsorMemberEntity);
@@ -63,7 +73,10 @@ describe("MemberEntity Factory", () => {
     const user = makeUserEntity();
     const params = { user, sponsoredValue: 10 };
 
-    const { member, isValid } = MemberFactory.create("sponsor", params);
+    const { member, isValid } = MemberFactory.create(
+      MembersTypeEnum.Sponsor,
+      params,
+    );
     const entity = new SponsorMemberEntity(params);
 
     expect(member).toBeInstanceOf(SponsorMemberEntity);
