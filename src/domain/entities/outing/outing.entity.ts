@@ -63,27 +63,14 @@ export class OutingEntity extends BaseEntityAbstract implements AggregateRoot {
     return this._members;
   }
 
-  addMember(type: MembersTypeEnum, params: CreateMemberParams): boolean {
-    const result = MemberFactory.create(type, params);
-    const member = result.member;
-
-    if (!result.isValid) {
-      this.addMemberNotification(member);
-      return false;
-    }
+  addMember(type: MembersTypeEnum, params: CreateMemberParams) {
+    const { member } = MemberFactory.create(type, params);
 
     this._members.push(member);
-    return true;
   }
 
   removeMember(id: IdVo): void {
     this._members = this._members.filter((member) => id.value !== member.id());
-  }
-
-  private restoreMembers(member: MemberEntity[]): void {
-    member.forEach((member) => {
-      this._members.push(member);
-    });
   }
 
   validate() {
@@ -97,12 +84,11 @@ export class OutingEntity extends BaseEntityAbstract implements AggregateRoot {
     }
 
     if (this._serviceFee < 0 || Number.isNaN(Number(this._serviceFee))) {
-      this.addNotification(new InvalidParamError("Service charge"));
+      this.addNotification(new InvalidParamError("Service fee"));
     }
 
     this._members.forEach((member) => {
-      member.validate();
-      if (!member.hasNotification()) this.addMemberNotification(member);
+      if (member.hasNotification()) this.addMemberNotification(member);
     });
   }
 
@@ -111,6 +97,12 @@ export class OutingEntity extends BaseEntityAbstract implements AggregateRoot {
 
     notifications.forEach((notification) => {
       this.addNotification(notification.notification);
+    });
+  }
+
+  private restoreMembers(member: MemberEntity[]): void {
+    member.forEach((member) => {
+      this._members.push(member);
     });
   }
 

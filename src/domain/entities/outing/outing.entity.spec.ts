@@ -71,23 +71,23 @@ describe("OutingEntity", () => {
     expect(result.outgoing.getServiceFee()).toBe(params.serviceFee);
     expect(result.outgoing.getDate()).toEqual(params.date);
 
-    expect(members.length).toBe(2);
+    expect(members.length).toBe(3);
     expect(members[0].getUser()).toEqual(params.members[0].data.user);
     expect(members[1].getUser()).toEqual(params.members[1].data.user);
+    expect(members[2].getUser()).toEqual(params.members[2].data.user);
 
     expect(result.isValid).toBeFalsy();
     expect(result.outgoing.getNotifications()).toEqual([
       {
         context: "Outing",
         notification: new DomainError(
-          `Member Kelps has a invalid sponsored value: "undefined"`,
+          `Param Place name "Park" must have at least 5 characters`,
         ),
       },
-
       {
         context: "Outing",
         notification: new DomainError(
-          `Param Place name "Park" must have at least 5 characters`,
+          `Member Kelps has a invalid sponsored value: "undefined"`,
         ),
       },
     ]);
