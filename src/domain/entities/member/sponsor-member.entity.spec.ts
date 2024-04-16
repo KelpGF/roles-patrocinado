@@ -15,9 +15,11 @@ describe("SponsorMemberEntity", () => {
     const user = makeUserEntity();
     const params = { user, sponsoredValue: 100 };
 
-    const entity = SponsorMemberEntity.create(params)
-      .value as SponsorMemberEntity;
+    const result = SponsorMemberEntity.create(params);
+    const entity = result.value as SponsorMemberEntity;
 
+    expect(result.isRight()).toBe(true);
+    expect(result.isLeft()).toBe(user.hasNotification);
     expect(entity.id).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
     );
@@ -40,9 +42,11 @@ describe("SponsorMemberEntity", () => {
       sponsoredValue: 100,
     };
 
-    const entity = SponsorMemberEntity.create(params)
-      .value as SponsorMemberEntity;
+    const result = SponsorMemberEntity.create(params);
+    const entity = result.value as SponsorMemberEntity;
 
+    expect(result.isRight()).toBe(true);
+    expect(result.isLeft()).toBe(user.hasNotification);
     expect(entity.id).toBe(params.id);
     expect(entity.createdAt).toEqual(params.createdAt);
     expect(entity.updatedAt).toEqual(params.updatedAt);
@@ -62,10 +66,10 @@ describe("SponsorMemberEntity", () => {
       updatedAt: new Date("2024-01-01T20:20:20Z"),
       sponsoredValue: 10,
     };
+    const result = SponsorMemberEntity.create(params);
+    const value = result.value as Errors;
 
-    const result = SponsorMemberEntity.create(params).value as Errors;
-
-    expect(result).toEqual({
+    expect(value).toEqual({
       errors: [
         `Member: Sponsor ${user.name} has a invalid sponsored value "10"`,
       ],

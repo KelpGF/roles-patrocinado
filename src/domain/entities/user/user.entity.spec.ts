@@ -12,6 +12,8 @@ describe("User Entity", () => {
     const result = UserEntity.create(params);
     const user = result.value as UserEntity;
 
+    expect(result.isRight()).toBe(true);
+    expect(result.isLeft()).toBe(user.hasNotification);
     expect(user).toBeInstanceOf(UserEntity);
     expect(user.id).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
@@ -28,6 +30,8 @@ describe("User Entity", () => {
     const result = UserEntity.create(params);
     const { errors } = result.value as Errors;
 
+    expect(result.isRight()).toBe(false);
+    expect(result.isLeft()).toBe(true);
     expect(errors).toEqual(["User: Param name 'Ke' has less 3 characters"]);
   });
 
