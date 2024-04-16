@@ -4,8 +4,8 @@ export type NotificationItemType = {
 };
 
 export interface NotificationInterface {
-  hasNotification(): boolean;
   addNotification(notification: NotificationItemType): void;
-  getMessages(): string[];
-  getNotifications(): NotificationItemType[];
+  messages: string[];
+  notifications: NotificationItemType[];
+  hasNotification: boolean;
 }

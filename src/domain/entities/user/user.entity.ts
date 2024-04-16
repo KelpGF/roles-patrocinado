@@ -25,7 +25,7 @@ export class UserEntity extends BaseEntityAbstract implements AggregateRoot {
     this.validate();
   }
 
-  getName() {
+  get name() {
     return this._name;
   }
 
@@ -40,8 +40,8 @@ export class UserEntity extends BaseEntityAbstract implements AggregateRoot {
   static create(params: Params): CreateEntityResult<UserEntity> {
     const entity = new UserEntity(params);
 
-    if (entity.hasNotification()) {
-      return EitherFactory.left({ errors: entity.getNotificationsMessages() });
+    if (entity.hasNotification) {
+      return EitherFactory.left({ errors: entity.notificationsMessages });
     }
 
     return EitherFactory.right(entity);

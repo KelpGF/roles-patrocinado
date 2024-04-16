@@ -22,47 +22,46 @@ export default abstract class MemberEntityAbstract extends BaseEntityAbstract {
     this._user = params.user;
   }
 
-  getUser(): UserEntity {
+  get user(): UserEntity {
     return this._user;
   }
 
-  isGuest(): boolean {
+  get isGuest(): boolean {
     return this._guest;
   }
 
-  isSponsor(): boolean {
+  get isSponsor(): boolean {
     return this._sponsor;
   }
 
-  getSponsorValue(): number {
+  get sponsorValue(): number {
     return this._sponsorValue;
   }
 
   validate() {
-    if (this.isGuest() && this.isSponsor()) {
+    if (this.isGuest && this.isSponsor) {
       this.addNotification(
         new DomainError(
-          `Member ${this._user.getName()} cannot be a guest and a sponsor at the same time`,
+          `Member ${this._user.name} cannot be a guest and a sponsor at the same time`,
         ),
       );
     }
 
     if (
-      this.isSponsor() &&
-      (this.getSponsorValue() < 50 ||
-        Number.isNaN(Number(this.getSponsorValue())))
+      this.isSponsor &&
+      (this.sponsorValue < 50 || Number.isNaN(Number(this.sponsorValue)))
     ) {
       this.addNotification(
         new DomainError(
-          `Member ${this._user.getName()} has a invalid sponsored value: "${this.getSponsorValue()}"`,
+          `Member ${this._user.name} has a invalid sponsored value: "${this.sponsorValue}"`,
         ),
       );
     }
 
-    if (this.isGuest() && this.getSponsorValue() > 0) {
+    if (this.isGuest && this.sponsorValue > 0) {
       this.addNotification(
         new DomainError(
-          `Member ${this._user.getName()} cannot be a guest and have a sponsored value at the same time`,
+          `Member ${this._user.name} cannot be a guest and have a sponsored value at the same time`,
         ),
       );
     }

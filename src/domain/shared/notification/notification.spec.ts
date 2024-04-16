@@ -4,9 +4,9 @@ describe("Notification", () => {
   test("should create a new instance of Notification with no messages", () => {
     const notification = new Notification();
 
-    expect(notification.hasNotification()).toBe(false);
-    expect(notification.getMessages()).toEqual([]);
-    expect(notification.getNotifications()).toEqual([]);
+    expect(notification.hasNotification).toBe(false);
+    expect(notification.messages).toEqual([]);
+    expect(notification.notifications).toEqual([]);
   });
 
   test("should add a new message to the notification", () => {
@@ -18,9 +18,9 @@ describe("Notification", () => {
       notification: error,
     });
 
-    expect(notification.hasNotification()).toBe(true);
-    expect(notification.getMessages()).toEqual(["context: A new message"]);
-    expect(notification.getNotifications()).toEqual([
+    expect(notification.hasNotification).toBe(true);
+    expect(notification.messages).toEqual(["context: A new message"]);
+    expect(notification.notifications).toEqual([
       { context: "context", notification: error },
     ]);
   });
@@ -37,12 +37,12 @@ describe("Notification", () => {
       notification: new Error("Another message"),
     });
 
-    expect(notification.hasNotification()).toBe(true);
-    expect(notification.getMessages()).toEqual([
+    expect(notification.hasNotification).toBe(true);
+    expect(notification.messages).toEqual([
       "context: A new message",
       "context1: Another message",
     ]);
-    expect(notification.getNotifications()).toEqual([
+    expect(notification.notifications).toEqual([
       { context: "context", notification: new Error("A new message") },
       { context: "context1", notification: new Error("Another message") },
     ]);

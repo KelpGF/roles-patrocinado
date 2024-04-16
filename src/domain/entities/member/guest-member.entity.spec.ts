@@ -15,16 +15,16 @@ describe("GuestMemberEntity", () => {
 
     const entity = new GuestMemberEntity(params);
 
-    expect(entity.id()).toMatch(
+    expect(entity.id).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
     );
-    expect(entity.createdAt()).toEqual(new Date("2020-01-01"));
-    expect(entity.updatedAt()).toEqual(new Date("2020-01-01"));
-    expect(entity.getUser()).toEqual(user);
-    expect(entity.isGuest()).toBeTruthy();
-    expect(entity.isSponsor()).toBeFalsy();
-    expect(entity.getSponsorValue()).toBe(0);
-    expect(entity.getNotifications()).toEqual([]);
+    expect(entity.createdAt).toEqual(new Date("2020-01-01"));
+    expect(entity.updatedAt).toEqual(new Date("2020-01-01"));
+    expect(entity.user).toEqual(user);
+    expect(entity.isGuest).toBeTruthy();
+    expect(entity.isSponsor).toBeFalsy();
+    expect(entity.sponsorValue).toBe(0);
+    expect(entity.notifications).toEqual([]);
   });
 
   test("should create a new instance of GuestMemberEntity with the same values", () => {
@@ -38,13 +38,13 @@ describe("GuestMemberEntity", () => {
 
     const entity = new GuestMemberEntity(params);
 
-    expect(entity.id()).toBe(params.id);
-    expect(entity.createdAt()).toEqual(params.createdAt);
-    expect(entity.updatedAt()).toEqual(params.updatedAt);
-    expect(entity.getUser()).toEqual(user);
-    expect(entity.isGuest()).toBeTruthy();
-    expect(entity.isSponsor()).toBeFalsy();
-    expect(entity.getNotifications()).toEqual([]);
-    expect(entity.getSponsorValue()).toBe(0);
+    expect(entity.id).toBe(params.id);
+    expect(entity.createdAt).toEqual(params.createdAt);
+    expect(entity.updatedAt).toEqual(params.updatedAt);
+    expect(entity.user).toEqual(user);
+    expect(entity.isGuest).toBeTruthy();
+    expect(entity.isSponsor).toBeFalsy();
+    expect(entity.sponsorValue).toBe(0);
+    expect(entity.notifications).toEqual([]);
   });
 });

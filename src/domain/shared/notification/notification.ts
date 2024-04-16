@@ -4,23 +4,23 @@ import {
 } from "./notification.interface";
 
 export class Notification implements NotificationInterface {
-  private notifications: NotificationItemType[] = [];
+  private _notifications: NotificationItemType[] = [];
 
-  hasNotification(): boolean {
-    return this.notifications.length > 0;
+  get notifications(): NotificationItemType[] {
+    return this._notifications;
   }
 
-  addNotification(notification: NotificationItemType): void {
-    this.notifications.push(notification);
+  get hasNotification(): boolean {
+    return this._notifications.length > 0;
   }
 
-  getMessages(): string[] {
-    return this.notifications.map(
+  get messages(): string[] {
+    return this._notifications.map(
       (item) => `${item.context}: ${item.notification.message}`,
     );
   }
 
-  getNotifications(): NotificationItemType[] {
-    return this.notifications;
+  addNotification(notification: NotificationItemType): void {
+    this._notifications.push(notification);
   }
 }

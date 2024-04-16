@@ -23,20 +23,28 @@ export abstract class BaseEntityAbstract {
     this._context = params.context;
   }
 
-  id(): string {
+  get id(): string {
     return this._id.value;
   }
 
-  getNotifications() {
-    return this._notification.getNotifications();
+  get createdAt(): Date {
+    return this._createdAt;
   }
 
-  getNotificationsMessages() {
-    return this._notification.getMessages();
+  get updatedAt(): Date {
+    return this._updatedAt;
   }
 
-  hasNotification() {
-    return this._notification.hasNotification();
+  get notifications() {
+    return this._notification.notifications;
+  }
+
+  get notificationsMessages() {
+    return this._notification.messages;
+  }
+
+  get hasNotification() {
+    return this.notifications.length > 0;
   }
 
   addNotification(notification: DomainError) {
@@ -44,13 +52,5 @@ export abstract class BaseEntityAbstract {
       context: this._context,
       notification,
     });
-  }
-
-  createdAt(): Date {
-    return this._createdAt;
-  }
-
-  updatedAt(): Date {
-    return this._updatedAt;
   }
 }

@@ -13,13 +13,13 @@ describe("User Entity", () => {
     const user = result.value as UserEntity;
 
     expect(user).toBeInstanceOf(UserEntity);
-    expect(user.id()).toMatch(
+    expect(user.id).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
     );
-    expect(user.createdAt()).toEqual(new Date("2020-01-01"));
-    expect(user.updatedAt()).toEqual(new Date("2020-01-01"));
-    expect(user.getName()).toBe("Kelvin");
-    expect(user.getNotifications()).toEqual([]);
+    expect(user.createdAt).toEqual(new Date("2020-01-01"));
+    expect(user.updatedAt).toEqual(new Date("2020-01-01"));
+    expect(user.name).toBe("Kelvin");
+    expect(user.notifications).toEqual([]);
   });
 
   test("should return errors when UserEntity is created with invalid params", () => {
@@ -42,9 +42,9 @@ describe("User Entity", () => {
     const result = UserEntity.restore(params);
 
     expect(result).toBeInstanceOf(UserEntity);
-    expect(result.id()).toBe(params.id);
-    expect(result.createdAt()).toEqual(params.createdAt);
-    expect(result.updatedAt()).toEqual(params.updatedAt);
-    expect(result.getName()).toBe("Kelvin");
+    expect(result.id).toBe(params.id);
+    expect(result.createdAt).toEqual(params.createdAt);
+    expect(result.updatedAt).toEqual(params.updatedAt);
+    expect(result.name).toBe("Kelvin");
   });
 });
