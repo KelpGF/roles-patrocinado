@@ -26,7 +26,6 @@ export default class MemberFactory {
   > {
     const memberFactory = memberStrategy[type] || memberStrategy.member;
 
-    const result = memberFactory(params);
-    return result;
+    return memberFactory(params);
   }
 }

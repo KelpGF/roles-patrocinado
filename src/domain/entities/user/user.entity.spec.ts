@@ -28,11 +28,13 @@ describe("User Entity", () => {
     const params = { name: "Ke" };
 
     const result = UserEntity.create(params);
-    const { errors } = result.value as Errors;
+    const value = result.value as Errors;
 
     expect(result.isRight()).toBe(false);
     expect(result.isLeft()).toBe(true);
-    expect(errors).toEqual(["User: Param name 'Ke' has less 3 characters"]);
+    expect(value).toEqual({
+      errors: ["User: Param name 'Ke' has less 3 characters"],
+    });
   });
 
   test("should create a new instance of UserEntity with the same values", () => {
