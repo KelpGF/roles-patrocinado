@@ -1,15 +1,12 @@
 import { DomainError } from "@/domain/shared/errors";
-import {
-  BaseEntityAbstract,
-  Params as BaseEntityAbstractParams,
-} from "../../shared/entities/base-entity.abstract";
+import { BaseEntityAbstract } from "../../shared/entities/base-entity.abstract";
 import { UserEntity } from "../user/user.entity";
+import { CreateEntityParams } from "@/domain/shared/entities/create-entity.type";
 
-export type Params = {
+export type Params = CreateEntityParams<{
   user: UserEntity;
-} & BaseEntityAbstractParams;
-
-export class MemberEntity extends BaseEntityAbstract {
+}>;
+export default abstract class MemberEntityAbstract extends BaseEntityAbstract {
   protected _user: UserEntity;
   protected _guest: boolean;
   protected _sponsor: boolean;
@@ -23,10 +20,6 @@ export class MemberEntity extends BaseEntityAbstract {
       context: "Member",
     });
     this._user = params.user;
-    this._guest = false;
-    this._sponsor = false;
-    this._sponsorValue = 0;
-    this.validate();
   }
 
   getUser(): UserEntity {

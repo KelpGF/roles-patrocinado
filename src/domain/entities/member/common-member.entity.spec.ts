@@ -1,18 +1,19 @@
 import { UserEntity } from "../user/user.entity";
-import { MemberEntity } from "./member.entity";
+import { CommonMemberEntity } from "./common-member.entity";
 
-describe("MemberEntity", () => {
-  const makeUserEntity = () => UserEntity.create({ name: "Kelvin" }).user;
+describe("CommonMemberEntity", () => {
+  const makeUserEntity = () =>
+    UserEntity.create({ name: "Kelvin" }).value as UserEntity;
 
   beforeEach(() => {
     jest.useFakeTimers().setSystemTime(new Date("2020-01-01"));
   });
 
-  test("should create a new instance of MemberEntity with new values", () => {
+  test("should create a new instance of CommonMemberEntity with new values", () => {
     const user = makeUserEntity();
     const params = { user };
 
-    const entity = new MemberEntity(params);
+    const entity = new CommonMemberEntity(params);
 
     expect(entity.id()).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
@@ -26,7 +27,7 @@ describe("MemberEntity", () => {
     expect(entity.getNotifications()).toEqual([]);
   });
 
-  test("should create a new instance of MemberEntity with the same values", () => {
+  test("should create a new instance of CommonMemberEntity with the same values", () => {
     const user = makeUserEntity();
     const params = {
       id: "123",
@@ -35,7 +36,7 @@ describe("MemberEntity", () => {
       updatedAt: new Date("2024-01-01T20:20:20Z"),
     };
 
-    const entity = new MemberEntity(params);
+    const entity = new CommonMemberEntity(params);
 
     expect(entity.id()).toBe(params.id);
     expect(entity.createdAt()).toEqual(params.createdAt);

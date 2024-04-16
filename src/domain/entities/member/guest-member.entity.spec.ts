@@ -2,7 +2,8 @@ import { UserEntity } from "../user/user.entity";
 import { GuestMemberEntity } from "./guest-member.entity";
 
 describe("GuestMemberEntity", () => {
-  const makeUserEntity = () => UserEntity.create({ name: "Kelvin" }).user;
+  const makeUserEntity = () =>
+    UserEntity.create({ name: "Kelvin" }).value as UserEntity;
 
   beforeEach(() => {
     jest.useFakeTimers().setSystemTime(new Date("2020-01-01"));

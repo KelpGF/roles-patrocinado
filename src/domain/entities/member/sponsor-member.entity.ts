@@ -1,12 +1,12 @@
-import { UserEntity } from "../user/user.entity";
-import { MemberEntity, Params as MemberEntityParams } from "./member.entity";
+import MemberEntityAbstract, {
+  Params as MemberEntityParams,
+} from "./member.entity.abstract";
 
 export type Params = {
-  user: UserEntity;
   sponsoredValue: number;
 } & MemberEntityParams;
 
-export class SponsorMemberEntity extends MemberEntity {
+export class SponsorMemberEntity extends MemberEntityAbstract {
   constructor(params: Params) {
     super({
       id: params.id,

@@ -1,6 +1,6 @@
 import MemberEntityAbstract, { Params } from "./member.entity.abstract";
 
-export class GuestMemberEntity extends MemberEntityAbstract {
+export class CommonMemberEntity extends MemberEntityAbstract {
   constructor(params: Params) {
     super({
       id: params.id,
@@ -8,7 +8,7 @@ export class GuestMemberEntity extends MemberEntityAbstract {
       updatedAt: params.updatedAt,
       user: params.user,
     });
-    this._guest = true;
+    this._guest = false;
     this._sponsor = false;
     this._sponsorValue = 0;
     this.validate();

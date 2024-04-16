@@ -3,7 +3,8 @@ import { UserEntity } from "../user/user.entity";
 import { SponsorMemberEntity } from "./sponsor-member.entity";
 
 describe("SponsorMemberEntity", () => {
-  const makeUserEntity = () => UserEntity.create({ name: "Kelvin" }).user;
+  const makeUserEntity = () =>
+    UserEntity.create({ name: "Kelvin" }).value as UserEntity;
 
   beforeEach(() => {
     jest.useFakeTimers().setSystemTime(new Date("2020-01-01"));
