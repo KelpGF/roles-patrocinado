@@ -12,6 +12,9 @@ import MemberEntityAbstract, {
 } from "../member/member.entity.abstract";
 import { MembersTypeEnum } from "@/domain/shared/enum/members-type.enum";
 import IdVo from "@/domain/shared/value-object/uuid.vo";
+import { DomainError } from "@/domain/shared/errors";
+import { CreateEntityResult } from "@/domain/shared/entities/create-entity.type";
+import EitherFactory from "@/domain/shared/either";
 
 type Params = {
   placeName: string;
@@ -75,7 +78,14 @@ export class OutingEntity extends BaseEntityAbstract implements AggregateRoot {
     if (memberAlreadyExists) return;
 
     const result = MemberFactory.create(type, params);
-    this._members.push(member);
+    if (result.isLeft()) {
+      result.value.errors.forEach((error) => {
+        this.addNotification(new DomainError(error));
+      });
+      return;
+    }
+
+    this._members.push(result.value);
   }
 
   removeMember(id: IdVo): void {
@@ -95,35 +105,22 @@ export class OutingEntity extends BaseEntityAbstract implements AggregateRoot {
     if (this._serviceFee < 0 || Number.isNaN(Number(this._serviceFee))) {
       this.addNotification(new InvalidParamError("Service fee"));
     }
-
-    this._members.forEach((member) => {
-      if (member.hasNotification) this.addMemberNotification(member);
-    });
   }
 
-  private addMemberNotification(member: MemberEntityAbstract): void {
-    const notifications = member.notifications;
-
-    notifications.forEach((notification) => {
-      this.addNotification(notification.notification);
-    });
-  }
-
-  private restoreMembers(member: MemberEntityAbstract[]): void {
-    member.forEach((member) => {
+  private restoreMembers(members: MemberEntityAbstract[]): void {
+    members.forEach((member) => {
       this._members.push(member);
     });
   }
 
-  static create(params: Params): {
-    outgoing: OutingEntity;
-    isValid: boolean;
-  } {
+  static create(params: Params): CreateEntityResult<OutingEntity> {
     const entity = new OutingEntity(params);
 
-    const isValid = !entity.hasNotification;
+    if (entity.hasNotification) {
+      return EitherFactory.left({ errors: entity.notificationsMessages });
+    }
 
-    return { outgoing: entity, isValid };
+    return EitherFactory.right(entity);
   }
 
   static restore(

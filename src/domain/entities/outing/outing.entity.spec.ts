@@ -2,7 +2,8 @@ import { MembersTypeEnum } from "@/domain/shared/enum/members-type.enum";
 import { OutingEntity } from "./outing.entity";
 import { UserEntity } from "../user/user.entity";
 import MemberFactory from "@/domain/factory/member.factory";
-import { DomainError } from "@/domain/shared/errors";
+import MemberEntityAbstract from "../member/member.entity.abstract";
+import { Errors } from "@/domain/shared/entities/create-entity.type";
 
 describe("OutingEntity", () => {
   beforeEach(() => {
@@ -21,42 +22,29 @@ describe("OutingEntity", () => {
     };
 
     const result = OutingEntity.create(params);
+    const entity = result.value as OutingEntity;
 
-    expect(result.isValid).toBe(true);
-    expect(result.outgoing).toBeInstanceOf(OutingEntity);
-    expect(result.outgoing.id).toMatch(
+    expect(result.isRight()).toBe(true);
+    expect(result.isLeft()).toBe(entity.hasNotification);
+    expect(entity).toBeInstanceOf(OutingEntity);
+    expect(entity.id).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
     );
-    expect(result.outgoing.placeName).toBe(params.placeName);
-    expect(result.outgoing.serviceFee).toBe(params.serviceFee);
-    expect(result.outgoing.date).toEqual(params.date);
-    expect(result.outgoing.members).toEqual([]);
-    expect(result.outgoing.notifications).toEqual([]);
-    expect(result.outgoing.createdAt).toEqual(new Date("2020-01-01"));
-    expect(result.outgoing.updatedAt).toEqual(new Date("2020-01-01"));
+    expect(entity.placeName).toBe(params.placeName);
+    expect(entity.serviceFee).toBe(params.serviceFee);
+    expect(entity.date).toEqual(params.date);
+    expect(entity.members).toEqual([]);
+    expect(entity.notifications).toEqual([]);
+    expect(entity.createdAt).toEqual(new Date("2020-01-01"));
+    expect(entity.updatedAt).toEqual(new Date("2020-01-01"));
   });
 
   test("should create a new instance with invalid values", () => {
     const params = {
-      id: "123",
       placeName: "Park",
-      serviceFee: 10,
+      serviceFee: -1,
       date: new Date("2024-01-10T10:10:10Z"),
-      createdAt: new Date("2024-01-01T10:10:10Z"),
-      updatedAt: new Date("2024-01-01T20:20:20Z"),
       members: [
-        {
-          type: MembersTypeEnum.Member,
-          data: {
-            user: UserEntity.create({ name: "Kelvin" }).value as UserEntity,
-          },
-        },
-        {
-          type: MembersTypeEnum.Guest,
-          data: {
-            user: UserEntity.create({ name: "Jelps" }).value as UserEntity,
-          },
-        },
         {
           type: MembersTypeEnum.Sponsor,
           data: {
@@ -67,34 +55,17 @@ describe("OutingEntity", () => {
     };
 
     const result = OutingEntity.create(params);
-    const members = result.outgoing.members;
+    const value = result.value as Errors;
 
-    expect(result.outgoing).toBeInstanceOf(OutingEntity);
-    expect(result.outgoing.id).toBe(params.id);
-    expect(result.outgoing.placeName).toBe(params.placeName);
-    expect(result.outgoing.serviceFee).toBe(params.serviceFee);
-    expect(result.outgoing.date).toEqual(params.date);
-
-    expect(members.length).toBe(3);
-    expect(members[0].user).toEqual(params.members[0].data.user);
-    expect(members[1].user).toEqual(params.members[1].data.user);
-    expect(members[2].user).toEqual(params.members[2].data.user);
-
-    expect(result.isValid).toBeFalsy();
-    expect(result.outgoing.notifications).toEqual([
-      {
-        context: "Outing",
-        notification: new DomainError(
-          `Param Place name "Park" must have at least 5 characters`,
-        ),
-      },
-      {
-        context: "Outing",
-        notification: new DomainError(
-          `Member Kelps has a invalid sponsored value: "undefined"`,
-        ),
-      },
-    ]);
+    expect(result.isRight()).toBe(false);
+    expect(result.isLeft()).toBe(true);
+    expect(value).toEqual({
+      errors: [
+        'Outing: Member: Sponsor Kelps has a invalid sponsored value "undefined"',
+        'Outing: Param Place name "Park" must have at least 5 characters',
+        "Outing: Param Service fee is invalid",
+      ],
+    });
   });
 
   test("should create a new instance with the same values", () => {
@@ -108,14 +79,14 @@ describe("OutingEntity", () => {
       members: [
         MemberFactory.create(MembersTypeEnum.Member, {
           user: UserEntity.create({ name: "Kelvin" }).value as UserEntity,
-        }).member,
+        }).value as MemberEntityAbstract,
         MemberFactory.create(MembersTypeEnum.Guest, {
           user: UserEntity.create({ name: "Kelv" }).value as UserEntity,
-        }).member,
+        }).value as MemberEntityAbstract,
         MemberFactory.create(MembersTypeEnum.Sponsor, {
           user: UserEntity.create({ name: "Kelps" }).value as UserEntity,
           sponsoredValue: 100,
-        }).member,
+        }).value as MemberEntityAbstract,
       ],
     };
 
