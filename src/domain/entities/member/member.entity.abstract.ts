@@ -53,7 +53,7 @@ export default abstract class MemberEntityAbstract extends BaseEntityAbstract {
     ) {
       this.addNotification(
         new DomainError(
-          `Member ${this._user.name} has a invalid sponsored value: "${this.sponsorValue}"`,
+          `Sponsor ${this._user.name} has a invalid sponsored value "${this.sponsorValue}"`,
         ),
       );
     }

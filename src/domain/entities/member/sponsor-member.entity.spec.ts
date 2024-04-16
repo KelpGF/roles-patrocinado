@@ -1,6 +1,7 @@
 import { DomainError } from "@/domain/shared/errors";
 import { UserEntity } from "../user/user.entity";
 import { SponsorMemberEntity } from "./sponsor-member.entity";
+import { Errors } from "@/domain/shared/entities/create-entity.type";
 
 describe("SponsorMemberEntity", () => {
   const makeUserEntity = () =>
@@ -14,7 +15,8 @@ describe("SponsorMemberEntity", () => {
     const user = makeUserEntity();
     const params = { user, sponsoredValue: 100 };
 
-    const entity = new SponsorMemberEntity(params);
+    const entity = SponsorMemberEntity.create(params)
+      .value as SponsorMemberEntity;
 
     expect(entity.id).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
@@ -38,7 +40,8 @@ describe("SponsorMemberEntity", () => {
       sponsoredValue: 100,
     };
 
-    const entity = new SponsorMemberEntity(params);
+    const entity = SponsorMemberEntity.create(params)
+      .value as SponsorMemberEntity;
 
     expect(entity.id).toBe(params.id);
     expect(entity.createdAt).toEqual(params.createdAt);
@@ -60,30 +63,21 @@ describe("SponsorMemberEntity", () => {
       sponsoredValue: 10,
     };
 
-    const entity = new SponsorMemberEntity(params);
+    const result = SponsorMemberEntity.create(params).value as Errors;
 
-    expect(entity.id).toBe(params.id);
-    expect(entity.createdAt).toEqual(params.createdAt);
-    expect(entity.updatedAt).toEqual(params.updatedAt);
-    expect(entity.user).toEqual(user);
-    expect(entity.isGuest).toBeFalsy();
-    expect(entity.isSponsor).toBeTruthy();
-    expect(entity.sponsorValue).toBe(params.sponsoredValue);
-    expect(entity.notifications).toEqual([
-      {
-        context: "Member",
-        notification: new DomainError(
-          `Member ${user.name} has a invalid sponsored value: "${params.sponsoredValue}"`,
-        ),
-      },
-    ]);
+    expect(result).toEqual({
+      errors: [
+        `Member: Sponsor ${user.name} has a invalid sponsored value "10"`,
+      ],
+    });
   });
 
   test("should change the sponsor value", () => {
     const user = makeUserEntity();
     const params = { user, sponsoredValue: 100 };
 
-    const entity = new SponsorMemberEntity(params);
+    const entity = SponsorMemberEntity.create(params)
+      .value as SponsorMemberEntity;
     expect(entity.sponsorValue).toBe(100);
     expect(entity.notifications).toEqual([]);
 
@@ -97,7 +91,7 @@ describe("SponsorMemberEntity", () => {
       {
         context: "Member",
         notification: new DomainError(
-          `Member ${user.name} has a invalid sponsored value: "0"`,
+          `Sponsor ${user.name} has a invalid sponsored value "0"`,
         ),
       },
     ]);

@@ -13,7 +13,8 @@ describe("CommonMemberEntity", () => {
     const user = makeUserEntity();
     const params = { user };
 
-    const entity = new CommonMemberEntity(params);
+    const entity = CommonMemberEntity.create(params)
+      .value as CommonMemberEntity;
 
     expect(entity.id).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
@@ -36,7 +37,8 @@ describe("CommonMemberEntity", () => {
       updatedAt: new Date("2024-01-01T20:20:20Z"),
     };
 
-    const entity = new CommonMemberEntity(params);
+    const entity = CommonMemberEntity.create(params)
+      .value as CommonMemberEntity;
 
     expect(entity.id).toBe(params.id);
     expect(entity.createdAt).toEqual(params.createdAt);

@@ -4,6 +4,7 @@ import {
   SponsorMemberEntity,
   UserEntity,
 } from "../entities";
+import { Errors } from "../shared/entities/create-entity.type";
 import { MembersTypeEnum } from "../shared/enum/members-type.enum";
 import MemberFactory from "./member.factory";
 
@@ -11,7 +12,7 @@ jest.mock("uuid", () => ({
   v4: jest.fn(() => "1"),
 }));
 
-describe("MemberEntity Factory", () => {
+describe("CommonMemberEntity Factory", () => {
   const makeUserEntity = () =>
     UserEntity.create({ name: "Kelvin" }).value as UserEntity;
 
@@ -23,15 +24,14 @@ describe("MemberEntity Factory", () => {
     const user = makeUserEntity();
     const params = { user };
 
-    const { member, isValid } = MemberFactory.create(
-      MembersTypeEnum.Member,
-      params,
-    );
-    const entity = new CommonMemberEntity(params);
+    const result = MemberFactory.create(MembersTypeEnum.Member, params);
+    const member = result.value as CommonMemberEntity;
+    const entity = CommonMemberEntity.create(params)
+      .value as CommonMemberEntity;
 
     expect(member).toBeInstanceOf(CommonMemberEntity);
-    expect(isValid).toBe(!member.hasNotification);
-    expect(isValid).toBe(true);
+    expect(result.isLeft()).toBe(member.hasNotification);
+    expect(result.isRight()).toBe(true);
     expect(member.hasNotification).toBe(false);
     expect(member).toEqual(entity);
   });
@@ -40,15 +40,13 @@ describe("MemberEntity Factory", () => {
     const user = makeUserEntity();
     const params = { user };
 
-    const { member, isValid } = MemberFactory.create(
-      MembersTypeEnum.Guest,
-      params,
-    );
-    const entity = new GuestMemberEntity(params);
+    const result = MemberFactory.create(MembersTypeEnum.Guest, params);
+    const member = result.value as GuestMemberEntity;
+    const entity = GuestMemberEntity.create(params).value as GuestMemberEntity;
 
     expect(member).toBeInstanceOf(GuestMemberEntity);
-    expect(isValid).toBe(!member.hasNotification);
-    expect(isValid).toBe(true);
+    expect(result.isLeft()).toBe(member.hasNotification);
+    expect(result.isRight()).toBe(true);
     expect(member.hasNotification).toBe(false);
     expect(member).toEqual(entity);
   });
@@ -57,15 +55,14 @@ describe("MemberEntity Factory", () => {
     const user = makeUserEntity();
     const params = { user, sponsoredValue: 100 };
 
-    const { member, isValid } = MemberFactory.create(
-      MembersTypeEnum.Sponsor,
-      params,
-    );
-    const entity = new SponsorMemberEntity(params);
+    const result = MemberFactory.create(MembersTypeEnum.Sponsor, params);
+    const member = result.value as SponsorMemberEntity;
+    const entity = SponsorMemberEntity.create(params)
+      .value as SponsorMemberEntity;
 
     expect(member).toBeInstanceOf(SponsorMemberEntity);
-    expect(isValid).toBe(!member.hasNotification);
-    expect(isValid).toBe(true);
+    expect(result.isLeft()).toBe(member.hasNotification);
+    expect(result.isRight()).toBe(true);
     expect(member.hasNotification).toBe(false);
     expect(member).toEqual(entity);
   });
@@ -74,16 +71,15 @@ describe("MemberEntity Factory", () => {
     const user = makeUserEntity();
     const params = { user, sponsoredValue: 10 };
 
-    const { member, isValid } = MemberFactory.create(
-      MembersTypeEnum.Sponsor,
-      params,
-    );
-    const entity = new SponsorMemberEntity(params);
+    const result = MemberFactory.create(MembersTypeEnum.Sponsor, params);
+    const value = result.value as Errors;
 
-    expect(member).toBeInstanceOf(SponsorMemberEntity);
-    expect(isValid).toBe(!member.hasNotification);
-    expect(isValid).toBe(false);
-    expect(member.hasNotification).toBe(true);
-    expect(member).toEqual(entity);
+    expect(result.isLeft()).toBe(true);
+    expect(result.isRight()).toBe(false);
+    expect(value).toEqual({
+      errors: [
+        `Member: Sponsor ${user.name} has a invalid sponsored value "10"`,
+      ],
+    });
   });
 });

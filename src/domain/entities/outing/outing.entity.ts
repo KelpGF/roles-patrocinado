@@ -74,8 +74,8 @@ export class OutingEntity extends BaseEntityAbstract implements AggregateRoot {
     }
     if (memberAlreadyExists) return;
 
-    const { member } = MemberFactory.create(type, params);
-    this._members.push(member);
+    // const result = MemberFactory.create(type, params);
+    // this._members.push(member);
   }
 
   removeMember(id: IdVo): void {

@@ -5,25 +5,28 @@ import {
   SponsorMemberEntity,
   Params as SponsorMemberEntityParams,
 } from "../entities/member/sponsor-member.entity";
+import { CreateEntityResult } from "../shared/entities/create-entity.type";
 import { MembersTypeEnum } from "../shared/enum/members-type.enum";
 
 export type Params = MemberEntityParams | SponsorMemberEntityParams;
 
 const memberStrategy = {
-  member: (params: MemberEntityParams) => new CommonMemberEntity(params),
+  member: (params: MemberEntityParams) => CommonMemberEntity.create(params),
   sponsor: (params: SponsorMemberEntityParams) =>
-    new SponsorMemberEntity(params),
-  guest: (params: MemberEntityParams) => new GuestMemberEntity(params),
+    SponsorMemberEntity.create(params),
+  guest: (params: MemberEntityParams) => GuestMemberEntity.create(params),
 };
 
 export default class MemberFactory {
-  // TODO: constructor privado nas classes de entidade
-  static create(type: MembersTypeEnum, params: Params) {
+  static create(
+    type: MembersTypeEnum,
+    params: Params,
+  ): CreateEntityResult<
+    CommonMemberEntity | SponsorMemberEntity | GuestMemberEntity
+  > {
     const memberFactory = memberStrategy[type] || memberStrategy.member;
 
-    const member = memberFactory(params);
-    const isValid = !member.hasNotification;
-
-    return { member, isValid };
+    const result = memberFactory(params);
+    return result;
   }
 }

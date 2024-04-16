@@ -1,3 +1,5 @@
+import EitherFactory from "@/domain/shared/either";
+import { CreateEntityResult } from "@/domain/shared/entities/create-entity.type";
 import MemberEntityAbstract, {
   Params as MemberEntityParams,
 } from "./member.entity.abstract";
@@ -7,7 +9,7 @@ export type Params = {
 } & MemberEntityParams;
 
 export class SponsorMemberEntity extends MemberEntityAbstract {
-  constructor(params: Params) {
+  private constructor(params: Params) {
     super({
       id: params.id,
       createdAt: params.createdAt,
@@ -23,5 +25,15 @@ export class SponsorMemberEntity extends MemberEntityAbstract {
   changeSponsorValue(value: number): void {
     this._sponsorValue = value;
     this.validate();
+  }
+
+  static create(params: Params): CreateEntityResult<SponsorMemberEntity> {
+    const entity = new SponsorMemberEntity(params);
+
+    if (entity.hasNotification) {
+      return EitherFactory.left({ errors: entity.notificationsMessages });
+    }
+
+    return EitherFactory.right(entity);
   }
 }
