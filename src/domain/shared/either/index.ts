@@ -32,5 +32,11 @@ class Right<L, R> {
   }
 }
 
-export const left = <L, R>(l: L): Either<L, R> => new Left(l);
-export const right = <L, R>(r: R): Either<L, R> => new Right(r);
+export default class EitherFactory {
+  static left<L, R>(l: L): Either<L, R> {
+    return new Left(l);
+  }
+  static right<L, R>(r: R): Either<L, R> {
+    return new Right(r);
+  }
+}
