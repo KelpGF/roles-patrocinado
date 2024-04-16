@@ -7,10 +7,9 @@ import {
   Params as BaseEntityAbstractParams,
 } from "../../shared/entities/base-entity.abstract";
 import { InvalidParamError } from "../../shared/errors/invalid-param-error";
-import {
-  MemberEntity,
+import MemberEntityAbstract, {
   Params as MemberEntityParams,
-} from "../member/member.entity";
+} from "../member/member.entity.abstract";
 import { MembersTypeEnum } from "@/domain/shared/enum/members-type.enum";
 import IdVo from "@/domain/shared/value-object/uuid.vo";
 
@@ -25,7 +24,8 @@ export class OutingEntity extends BaseEntityAbstract implements AggregateRoot {
   private _placeName: string;
   private _date: Date;
   private _serviceFee: number;
-  private _members: MemberEntity[] = [];
+  // TODO: separar por tipo?
+  private _members: MemberEntityAbstract[] = [];
 
   private constructor(params: Params) {
     super({
@@ -47,30 +47,39 @@ export class OutingEntity extends BaseEntityAbstract implements AggregateRoot {
     this.validate();
   }
 
-  getPlaceName(): string {
+  get placeName(): string {
     return this._placeName;
   }
 
-  getDate(): Date {
+  get date(): Date {
     return this._date;
   }
 
-  getServiceFee(): number {
+  get serviceFee(): number {
     return this._serviceFee;
   }
 
-  getMembers(): MemberEntity[] {
+  get members(): MemberEntityAbstract[] {
     return this._members;
   }
 
   addMember(type: MembersTypeEnum, params: CreateMemberParams) {
-    const { member } = MemberFactory.create(type, params);
+    let memberAlreadyExists = false;
 
+    for (const member of this._members) {
+      if (params.id === member.id || params.user.id === member.user.id) {
+        memberAlreadyExists = true;
+        break;
+      }
+    }
+    if (memberAlreadyExists) return;
+
+    const { member } = MemberFactory.create(type, params);
     this._members.push(member);
   }
 
   removeMember(id: IdVo): void {
-    this._members = this._members.filter((member) => id.value !== member.id());
+    this._members = this._members.filter((member) => id.value !== member.id);
   }
 
   validate() {
@@ -88,19 +97,19 @@ export class OutingEntity extends BaseEntityAbstract implements AggregateRoot {
     }
 
     this._members.forEach((member) => {
-      if (member.hasNotification()) this.addMemberNotification(member);
+      if (member.hasNotification) this.addMemberNotification(member);
     });
   }
 
-  private addMemberNotification(member: MemberEntity): void {
-    const notifications = member.getNotifications();
+  private addMemberNotification(member: MemberEntityAbstract): void {
+    const notifications = member.notifications;
 
     notifications.forEach((notification) => {
       this.addNotification(notification.notification);
     });
   }
 
-  private restoreMembers(member: MemberEntity[]): void {
+  private restoreMembers(member: MemberEntityAbstract[]): void {
     member.forEach((member) => {
       this._members.push(member);
     });
@@ -112,13 +121,15 @@ export class OutingEntity extends BaseEntityAbstract implements AggregateRoot {
   } {
     const entity = new OutingEntity(params);
 
-    const isValid = !entity.hasNotification();
+    const isValid = !entity.hasNotification;
 
     return { outgoing: entity, isValid };
   }
 
   static restore(
-    params: Omit<Required<Params>, "members"> & { members: MemberEntity[] },
+    params: Omit<Required<Params>, "members"> & {
+      members: MemberEntityAbstract[];
+    },
   ): OutingEntity {
     const entity = new OutingEntity({
       id: params.id,

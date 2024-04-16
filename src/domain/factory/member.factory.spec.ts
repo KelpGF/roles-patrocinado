@@ -1,6 +1,6 @@
 import {
   GuestMemberEntity,
-  MemberEntity,
+  CommonMemberEntity,
   SponsorMemberEntity,
   UserEntity,
 } from "../entities";
@@ -12,7 +12,8 @@ jest.mock("uuid", () => ({
 }));
 
 describe("MemberEntity Factory", () => {
-  const makeUserEntity = () => UserEntity.create({ name: "Kelvin" }).user;
+  const makeUserEntity = () =>
+    UserEntity.create({ name: "Kelvin" }).value as UserEntity;
 
   beforeEach(() => {
     jest.useFakeTimers().setSystemTime(new Date("2020-01-01"));
@@ -26,12 +27,12 @@ describe("MemberEntity Factory", () => {
       MembersTypeEnum.Member,
       params,
     );
-    const entity = new MemberEntity(params);
+    const entity = new CommonMemberEntity(params);
 
-    expect(member).toBeInstanceOf(MemberEntity);
-    expect(isValid).toBe(!member.hasNotification());
+    expect(member).toBeInstanceOf(CommonMemberEntity);
+    expect(isValid).toBe(!member.hasNotification);
     expect(isValid).toBe(true);
-    expect(member.hasNotification()).toBe(false);
+    expect(member.hasNotification).toBe(false);
     expect(member).toEqual(entity);
   });
 
@@ -46,9 +47,9 @@ describe("MemberEntity Factory", () => {
     const entity = new GuestMemberEntity(params);
 
     expect(member).toBeInstanceOf(GuestMemberEntity);
-    expect(isValid).toBe(!member.hasNotification());
+    expect(isValid).toBe(!member.hasNotification);
     expect(isValid).toBe(true);
-    expect(member.hasNotification()).toBe(false);
+    expect(member.hasNotification).toBe(false);
     expect(member).toEqual(entity);
   });
 
@@ -63,9 +64,9 @@ describe("MemberEntity Factory", () => {
     const entity = new SponsorMemberEntity(params);
 
     expect(member).toBeInstanceOf(SponsorMemberEntity);
-    expect(isValid).toBe(!member.hasNotification());
+    expect(isValid).toBe(!member.hasNotification);
     expect(isValid).toBe(true);
-    expect(member.hasNotification()).toBe(false);
+    expect(member.hasNotification).toBe(false);
     expect(member).toEqual(entity);
   });
 
@@ -80,9 +81,9 @@ describe("MemberEntity Factory", () => {
     const entity = new SponsorMemberEntity(params);
 
     expect(member).toBeInstanceOf(SponsorMemberEntity);
-    expect(isValid).toBe(!member.hasNotification());
+    expect(isValid).toBe(!member.hasNotification);
     expect(isValid).toBe(false);
-    expect(member.hasNotification()).toBe(true);
+    expect(member.hasNotification).toBe(true);
     expect(member).toEqual(entity);
   });
 });
