@@ -6,7 +6,7 @@ import {
 
 export type CreateEntityParams<T> = T & BaseEntityAbstractParams;
 
-export type Errors = { errors: string[] };
+export type Errors = { errors: string[] }; // TODO: Change to DomainError[]
 export type CreateEntityResult<T extends BaseEntityAbstract> = Either<
   Errors,
   T

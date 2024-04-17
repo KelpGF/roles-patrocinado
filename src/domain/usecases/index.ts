@@ -1,1 +1,1 @@
-export * from "./create-walkway.usecase.interface";
+export * from "./create-outgoing.usecase.interface";

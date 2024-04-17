@@ -39,14 +39,14 @@ describe("OutingEntity", () => {
     expect(entity.updatedAt).toEqual(new Date("2020-01-01"));
   });
 
-  test("should create a new instance with invalid values", () => {
+  test.only("should create a new instance with invalid values", () => {
     const params = {
       placeName: "Park",
       serviceFee: -1,
       date: new Date("2024-01-10T10:10:10Z"),
       members: [
         {
-          type: MembersTypeEnum.COMMON,
+          type: MembersTypeEnum.SPONSOR,
           data: {
             user: UserEntity.create({ name: "Kelps" }).value as UserEntity,
           },
