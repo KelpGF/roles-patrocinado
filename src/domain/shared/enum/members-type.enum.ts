@@ -1,5 +1,5 @@
 export enum MembersTypeEnum {
-  Member = "member",
-  Sponsor = "sponsor",
-  Guest = "guest",
+  COMMON = "common",
+  SPONSOR = "sponsor",
+  GUEST = "guest",
 }

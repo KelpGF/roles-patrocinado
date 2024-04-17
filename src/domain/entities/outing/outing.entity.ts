@@ -27,7 +27,6 @@ export class OutingEntity extends BaseEntityAbstract implements AggregateRoot {
   private _placeName: string;
   private _date: Date;
   private _serviceFee: number;
-  // TODO: separar por tipo?
   private _members: MemberEntityAbstract[] = [];
 
   private constructor(params: Params) {

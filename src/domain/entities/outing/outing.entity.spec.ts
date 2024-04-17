@@ -46,7 +46,7 @@ describe("OutingEntity", () => {
       date: new Date("2024-01-10T10:10:10Z"),
       members: [
         {
-          type: MembersTypeEnum.Sponsor,
+          type: MembersTypeEnum.COMMON,
           data: {
             user: UserEntity.create({ name: "Kelps" }).value as UserEntity,
           },
@@ -77,13 +77,13 @@ describe("OutingEntity", () => {
       createdAt: new Date("2024-01-01T10:10:10Z"),
       updatedAt: new Date("2024-01-01T20:20:20Z"),
       members: [
-        MemberFactory.create(MembersTypeEnum.Member, {
+        MemberFactory.create(MembersTypeEnum.COMMON, {
           user: UserEntity.create({ name: "Kelvin" }).value as UserEntity,
         }).value as MemberEntityAbstract,
-        MemberFactory.create(MembersTypeEnum.Guest, {
+        MemberFactory.create(MembersTypeEnum.GUEST, {
           user: UserEntity.create({ name: "Kelv" }).value as UserEntity,
         }).value as MemberEntityAbstract,
-        MemberFactory.create(MembersTypeEnum.Sponsor, {
+        MemberFactory.create(MembersTypeEnum.SPONSOR, {
           user: UserEntity.create({ name: "Kelps" }).value as UserEntity,
           sponsoredValue: 100,
         }).value as MemberEntityAbstract,

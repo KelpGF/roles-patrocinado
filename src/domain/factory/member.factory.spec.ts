@@ -24,7 +24,7 @@ describe("CommonMemberEntity Factory", () => {
     const user = makeUserEntity();
     const params = { user };
 
-    const result = MemberFactory.create(MembersTypeEnum.Member, params);
+    const result = MemberFactory.create(MembersTypeEnum.COMMON, params);
     const member = result.value as CommonMemberEntity;
     const entity = CommonMemberEntity.create(params)
       .value as CommonMemberEntity;
@@ -40,7 +40,7 @@ describe("CommonMemberEntity Factory", () => {
     const user = makeUserEntity();
     const params = { user };
 
-    const result = MemberFactory.create(MembersTypeEnum.Guest, params);
+    const result = MemberFactory.create(MembersTypeEnum.GUEST, params);
     const member = result.value as GuestMemberEntity;
     const entity = GuestMemberEntity.create(params).value as GuestMemberEntity;
 
@@ -55,7 +55,7 @@ describe("CommonMemberEntity Factory", () => {
     const user = makeUserEntity();
     const params = { user, sponsoredValue: 100 };
 
-    const result = MemberFactory.create(MembersTypeEnum.Sponsor, params);
+    const result = MemberFactory.create(MembersTypeEnum.SPONSOR, params);
     const member = result.value as SponsorMemberEntity;
     const entity = SponsorMemberEntity.create(params)
       .value as SponsorMemberEntity;
@@ -71,7 +71,7 @@ describe("CommonMemberEntity Factory", () => {
     const user = makeUserEntity();
     const params = { user, sponsoredValue: 10 };
 
-    const result = MemberFactory.create(MembersTypeEnum.Sponsor, params);
+    const result = MemberFactory.create(MembersTypeEnum.SPONSOR, params);
     const value = result.value as Errors;
 
     expect(result.isLeft()).toBe(true);
