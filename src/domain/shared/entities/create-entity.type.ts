@@ -1,4 +1,5 @@
 import { Either } from "../either";
+import { DomainError } from "../errors";
 import {
   BaseEntityAbstract,
   Params as BaseEntityAbstractParams,
@@ -6,7 +7,7 @@ import {
 
 export type CreateEntityParams<T> = T & BaseEntityAbstractParams;
 
-export type Errors = { errors: string[] }; // TODO: Change to DomainError[]
+export type Errors = { errors: DomainError[] };
 export type CreateEntityResult<T extends BaseEntityAbstract> = Either<
   Errors,
   T

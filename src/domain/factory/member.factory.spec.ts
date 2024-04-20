@@ -6,6 +6,7 @@ import {
 } from "../entities";
 import { Errors } from "../shared/entities/create-entity.type";
 import { MembersTypeEnum } from "../shared/enum/members-type.enum";
+import { DomainError } from "../shared/errors";
 import MemberFactory from "./member.factory";
 
 jest.mock("uuid", () => ({
@@ -78,7 +79,9 @@ describe("CommonMemberEntity Factory", () => {
     expect(result.isRight()).toBe(false);
     expect(value).toEqual({
       errors: [
-        `Member: Sponsor ${user.name} has a invalid sponsored value "10"`,
+        new DomainError(
+          `Member: Sponsor ${user.name} has a invalid sponsored value "10"`,
+        ),
       ],
     });
   });

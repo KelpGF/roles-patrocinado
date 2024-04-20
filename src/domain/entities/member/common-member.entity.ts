@@ -1,6 +1,6 @@
 import { CreateEntityResult } from "@/domain/shared/entities/create-entity.type";
 import MemberEntityAbstract, { Params } from "./member.entity.abstract";
-import EitherFactory from "@/domain/shared/either";
+import { entityErrorHandling } from "@/domain/shared/errors/entities.error.handling";
 
 export class CommonMemberEntity extends MemberEntityAbstract {
   private constructor(params: Params) {
@@ -19,10 +19,6 @@ export class CommonMemberEntity extends MemberEntityAbstract {
   static create(params: Params): CreateEntityResult<CommonMemberEntity> {
     const entity = new CommonMemberEntity(params);
 
-    if (entity.hasNotification) {
-      return EitherFactory.left({ errors: entity.notificationsMessages });
-    }
-
-    return EitherFactory.right(entity);
+    return entityErrorHandling(entity);
   }
 }

@@ -1,4 +1,3 @@
-import EitherFactory from "@/domain/shared/either";
 import { AggregateRoot } from "@/domain/shared/entities/aggregate-root.interface";
 import { BaseEntityAbstract } from "@/domain/shared/entities/base-entity.abstract";
 import {
@@ -6,6 +5,7 @@ import {
   CreateEntityResult,
 } from "@/domain/shared/entities/create-entity.type";
 import { InvalidParamError } from "@/domain/shared/errors/invalid-param-error";
+import { entityErrorHandling } from "@/domain/shared/errors/entities.error.handling";
 
 type Params = CreateEntityParams<{
   name: string;
@@ -40,11 +40,7 @@ export class UserEntity extends BaseEntityAbstract implements AggregateRoot {
   static create(params: Params): CreateEntityResult<UserEntity> {
     const entity = new UserEntity(params);
 
-    if (entity.hasNotification) {
-      return EitherFactory.left({ errors: entity.notificationsMessages });
-    }
-
-    return EitherFactory.right(entity);
+    return entityErrorHandling(entity);
   }
 
   static restore(params: Required<Params>) {

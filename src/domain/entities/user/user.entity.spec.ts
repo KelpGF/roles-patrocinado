@@ -1,3 +1,4 @@
+import { DomainError } from "@/domain/shared/errors";
 import { UserEntity } from "./user.entity";
 import { Errors } from "@/domain/shared/entities/create-entity.type";
 
@@ -33,7 +34,7 @@ describe("User Entity", () => {
     expect(result.isRight()).toBe(false);
     expect(result.isLeft()).toBe(true);
     expect(value).toEqual({
-      errors: ["User: Param name 'Ke' has less 3 characters"],
+      errors: [new DomainError("User: Param name 'Ke' has less 3 characters")],
     });
   });
 

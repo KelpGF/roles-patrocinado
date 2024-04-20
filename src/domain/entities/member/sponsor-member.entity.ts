@@ -1,8 +1,8 @@
-import EitherFactory from "@/domain/shared/either";
 import { CreateEntityResult } from "@/domain/shared/entities/create-entity.type";
 import MemberEntityAbstract, {
   Params as MemberEntityParams,
 } from "./member.entity.abstract";
+import { entityErrorHandling } from "@/domain/shared/errors/entities.error.handling";
 
 export type Params = {
   sponsoredValue: number;
@@ -30,10 +30,6 @@ export class SponsorMemberEntity extends MemberEntityAbstract {
   static create(params: Params): CreateEntityResult<SponsorMemberEntity> {
     const entity = new SponsorMemberEntity(params);
 
-    if (entity.hasNotification) {
-      return EitherFactory.left({ errors: entity.notificationsMessages });
-    }
-
-    return EitherFactory.right(entity);
+    return entityErrorHandling(entity);
   }
 }

@@ -71,7 +71,9 @@ describe("SponsorMemberEntity", () => {
 
     expect(value).toEqual({
       errors: [
-        `Member: Sponsor ${user.name} has a invalid sponsored value "10"`,
+        new DomainError(
+          `Member: Sponsor ${user.name} has a invalid sponsored value "10"`,
+        ),
       ],
     });
   });

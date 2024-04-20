@@ -12,9 +12,8 @@ import MemberEntityAbstract, {
 } from "../member/member.entity.abstract";
 import { MembersTypeEnum } from "@/domain/shared/enum/members-type.enum";
 import IdVo from "@/domain/shared/value-object/uuid.vo";
-import { DomainError } from "@/domain/shared/errors";
 import { CreateEntityResult } from "@/domain/shared/entities/create-entity.type";
-import EitherFactory from "@/domain/shared/either";
+import { entityErrorHandling } from "@/domain/shared/errors/entities.error.handling";
 
 type Params = {
   placeName: string;
@@ -79,7 +78,7 @@ export class OutingEntity extends BaseEntityAbstract implements AggregateRoot {
     const result = MemberFactory.create(type, params);
     if (result.isLeft()) {
       result.value.errors.forEach((error) => {
-        this.addNotification(new DomainError(error));
+        this.addNotification(error);
       });
       return;
     }
@@ -115,11 +114,7 @@ export class OutingEntity extends BaseEntityAbstract implements AggregateRoot {
   static create(params: Params): CreateEntityResult<OutingEntity> {
     const entity = new OutingEntity(params);
 
-    if (entity.hasNotification) {
-      return EitherFactory.left({ errors: entity.notificationsMessages });
-    }
-
-    return EitherFactory.right(entity);
+    return entityErrorHandling(entity);
   }
 
   static restore(

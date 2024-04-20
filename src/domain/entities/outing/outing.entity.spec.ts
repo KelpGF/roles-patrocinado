@@ -4,6 +4,7 @@ import { UserEntity } from "../user/user.entity";
 import MemberFactory from "@/domain/factory/member.factory";
 import MemberEntityAbstract from "../member/member.entity.abstract";
 import { Errors } from "@/domain/shared/entities/create-entity.type";
+import { DomainError } from "@/domain/shared/errors";
 
 describe("OutingEntity", () => {
   beforeEach(() => {
@@ -61,9 +62,13 @@ describe("OutingEntity", () => {
     expect(result.isLeft()).toBe(true);
     expect(value).toEqual({
       errors: [
-        'Outing: Member: Sponsor Kelps has a invalid sponsored value "undefined"',
-        'Outing: Param Place name "Park" must have at least 5 characters',
-        "Outing: Param Service fee is invalid",
+        new DomainError(
+          'Outing: Member: Sponsor Kelps has a invalid sponsored value "undefined"',
+        ),
+        new DomainError(
+          'Outing: Param Place name "Park" must have at least 5 characters',
+        ),
+        new DomainError("Outing: Param Service fee is invalid"),
       ],
     });
   });
