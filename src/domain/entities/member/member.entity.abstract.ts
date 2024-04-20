@@ -2,17 +2,16 @@ import { DomainError } from "@/domain/shared/errors";
 import { BaseEntityAbstract } from "../../shared/entities/base-entity.abstract";
 import { UserEntity } from "../user/user.entity";
 import { CreateEntityParams } from "@/domain/shared/entities/create-entity.type";
+import { MembersTypeEnum } from "@/domain/shared/enum/members-type.enum";
 
 export type Params = CreateEntityParams<{
   user: UserEntity;
 }>;
 export default abstract class MemberEntityAbstract extends BaseEntityAbstract {
   protected _user: UserEntity;
-  protected _guest: boolean;
-  protected _sponsor: boolean;
   protected _sponsorValue: number;
 
-  constructor(params: Params) {
+  protected constructor(params: Params) {
     super({
       id: params.id,
       createdAt: params.createdAt,
@@ -20,22 +19,19 @@ export default abstract class MemberEntityAbstract extends BaseEntityAbstract {
       context: "Member",
     });
     this._user = params.user;
+    this._sponsorValue = 0;
+  }
+
+  abstract get type(): MembersTypeEnum;
+  abstract get isGuest(): boolean;
+  abstract get isSponsor(): boolean;
+
+  get sponsorValue(): number {
+    return this._sponsorValue;
   }
 
   get user(): UserEntity {
     return this._user;
-  }
-
-  get isGuest(): boolean {
-    return this._guest;
-  }
-
-  get isSponsor(): boolean {
-    return this._sponsor;
-  }
-
-  get sponsorValue(): number {
-    return this._sponsorValue;
   }
 
   validate() {

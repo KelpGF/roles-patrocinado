@@ -1,3 +1,4 @@
+import { MembersTypeEnum } from "@/domain/shared/enum/members-type.enum";
 import { UserEntity } from "../user/user.entity";
 import { CommonMemberEntity } from "./common-member.entity";
 
@@ -27,6 +28,7 @@ describe("CommonMemberEntity", () => {
     expect(entity.isGuest).toBeFalsy();
     expect(entity.isSponsor).toBeFalsy();
     expect(entity.sponsorValue).toBe(0);
+    expect(entity.type).toBe(MembersTypeEnum.COMMON);
     expect(entity.notifications).toEqual([]);
   });
 
@@ -51,6 +53,7 @@ describe("CommonMemberEntity", () => {
     expect(entity.isGuest).toBeFalsy();
     expect(entity.isSponsor).toBeFalsy();
     expect(entity.notifications).toEqual([]);
+    expect(entity.type).toBe(MembersTypeEnum.COMMON);
     expect(entity.sponsorValue).toBe(0);
   });
 });

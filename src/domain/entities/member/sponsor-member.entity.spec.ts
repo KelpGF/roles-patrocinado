@@ -2,6 +2,7 @@ import { DomainError } from "@/domain/shared/errors";
 import { UserEntity } from "../user/user.entity";
 import { SponsorMemberEntity } from "./sponsor-member.entity";
 import { Errors } from "@/domain/shared/entities/create-entity.type";
+import { MembersTypeEnum } from "@/domain/shared/enum/members-type.enum";
 
 describe("SponsorMemberEntity", () => {
   const makeUserEntity = () =>
@@ -28,7 +29,8 @@ describe("SponsorMemberEntity", () => {
     expect(entity.user).toEqual(user);
     expect(entity.isGuest).toBeFalsy();
     expect(entity.isSponsor).toBeTruthy();
-    expect(entity.sponsorValue).toBe(params.sponsoredValue);
+    expect(entity.isSponsor).toBeTruthy();
+    expect(entity.type).toBe(MembersTypeEnum.SPONSOR);
     expect(entity.notifications).toEqual([]);
   });
 
@@ -54,6 +56,7 @@ describe("SponsorMemberEntity", () => {
     expect(entity.isGuest).toBeFalsy();
     expect(entity.isSponsor).toBeTruthy();
     expect(entity.sponsorValue).toBe(params.sponsoredValue);
+    expect(entity.type).toBe(MembersTypeEnum.SPONSOR);
     expect(entity.notifications).toEqual([]);
   });
 

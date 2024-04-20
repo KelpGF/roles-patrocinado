@@ -3,6 +3,7 @@ import MemberEntityAbstract, {
   Params as MemberEntityParams,
 } from "./member.entity.abstract";
 import { entityErrorHandling } from "@/domain/shared/errors/entities.error.handling";
+import { MembersTypeEnum } from "@/domain/shared/enum/members-type.enum";
 
 export type Params = {
   sponsoredValue: number;
@@ -16,10 +17,20 @@ export class SponsorMemberEntity extends MemberEntityAbstract {
       updatedAt: params.updatedAt,
       user: params.user,
     });
-    this._guest = false;
-    this._sponsor = true;
     this._sponsorValue = params.sponsoredValue;
     this.validate();
+  }
+
+  get type(): MembersTypeEnum {
+    return MembersTypeEnum.SPONSOR;
+  }
+
+  get isGuest(): boolean {
+    return false;
+  }
+
+  get isSponsor(): boolean {
+    return true;
   }
 
   changeSponsorValue(value: number): void {

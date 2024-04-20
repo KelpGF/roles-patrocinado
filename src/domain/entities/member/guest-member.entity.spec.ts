@@ -1,3 +1,4 @@
+import { MembersTypeEnum } from "@/domain/shared/enum/members-type.enum";
 import { UserEntity } from "../user/user.entity";
 import { GuestMemberEntity } from "./guest-member.entity";
 
@@ -27,6 +28,7 @@ describe("GuestMemberEntity", () => {
     expect(entity.isGuest).toBeTruthy();
     expect(entity.isSponsor).toBeFalsy();
     expect(entity.sponsorValue).toBe(0);
+    expect(entity.type).toBe(MembersTypeEnum.GUEST);
     expect(entity.notifications).toEqual([]);
   });
 
@@ -51,6 +53,7 @@ describe("GuestMemberEntity", () => {
     expect(entity.isGuest).toBeTruthy();
     expect(entity.isSponsor).toBeFalsy();
     expect(entity.sponsorValue).toBe(0);
+    expect(entity.type).toBe(MembersTypeEnum.GUEST);
     expect(entity.notifications).toEqual([]);
   });
 });
