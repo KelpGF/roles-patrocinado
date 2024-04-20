@@ -10,3 +10,15 @@ services:
     entrypoint: sh .docker/entrypoint.sh
     volumes:
       - .:/usr/app/roles-patrocinado
+
+  database:
+    image: postgres:15
+    container_name: role-patrocinado-db
+    environment:
+      POSTGRES_PASSWORD: qwe123
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/pg:/var/lib/postgresql/data
+      - ./db/01-sponsored-outing-ddl.sql:/docker-entrypoint-initdb.d/01-sponsored-outing-ddl.sql
+      - ./db/02-sponsored-outing-dml.sql:/docker-entrypoint-initdb.d/02-sponsored-outing-dml.sql
