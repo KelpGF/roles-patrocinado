@@ -4,7 +4,7 @@ import { InfraError } from "@/domain/shared/errors";
 
 export interface CreateOutingRepositoryProtocol {
   create(
-    data: CreateOutingRepositoryProtocol.Input,
+    input: CreateOutingRepositoryProtocol.Input,
   ): CreateOutingRepositoryProtocol.Output;
 }
 
