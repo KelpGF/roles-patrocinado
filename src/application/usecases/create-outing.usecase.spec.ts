@@ -1,10 +1,10 @@
-import { CreateOutgoingUseCaseInterface } from "@/domain/usecases";
-import { CreateOutgoingUseCase } from "./create-outgoing.usecase";
+import { CreateOutingUseCaseInterface } from "@/domain/usecases";
+import { CreateOutingUseCase } from "./create-outing.usecase";
 import { UserEntity } from "@/domain/entities";
 import EitherFactory from "@/domain/shared/either";
 import { DomainError, InfraError } from "@/domain/shared/errors";
 
-const makeInput = (): CreateOutgoingUseCaseInterface.Input => ({
+const makeInput = (): CreateOutingUseCaseInterface.Input => ({
   name: "Outing name",
   serviceFee: 100,
   date: new Date(),
@@ -15,20 +15,20 @@ const makeInput = (): CreateOutgoingUseCaseInterface.Input => ({
   },
 });
 
-describe("CreateOutgoingUseCase", () => {
+describe("CreateOutingUseCase", () => {
   let findUserByIdsRepositoryProtocol = {
     create: jest.fn(),
   };
-  let createOutgoingRepository = {
+  let createOutingRepository = {
     create: jest.fn().mockResolvedValue({ outingId: "1" }),
   };
-  let createOutgoingUseCase: CreateOutgoingUseCase;
+  let createOutingUseCase: CreateOutingUseCase;
 
   beforeEach(() => {
-    createOutgoingRepository = {
+    createOutingRepository = {
       create: jest
         .fn()
-        .mockResolvedValue(EitherFactory.right({ outgoingId: "1" })),
+        .mockResolvedValue(EitherFactory.right({ outingId: "1" })),
     };
     findUserByIdsRepositoryProtocol = {
       create: jest.fn().mockImplementation((params: { userIds: string[] }) => {
@@ -41,21 +41,21 @@ describe("CreateOutgoingUseCase", () => {
         );
       }),
     };
-    createOutgoingUseCase = new CreateOutgoingUseCase(
-      createOutgoingRepository,
+    createOutingUseCase = new CreateOutingUseCase(
+      createOutingRepository,
       findUserByIdsRepositoryProtocol,
     );
   });
 
-  test("should create an outgoing", async () => {
+  test("should create an outing", async () => {
     const input = makeInput();
 
-    const output = await createOutgoingUseCase.execute(input);
-    const { outgoingId } = output.value as { outgoingId: string };
+    const output = await createOutingUseCase.execute(input);
+    const { outingId } = output.value as { outingId: string };
 
     expect(output.isLeft()).toBe(false);
     expect(output.isRight()).toBe(true);
-    expect(outgoingId).toBe("1");
+    expect(outingId).toBe("1");
   });
 
   test("should return a domain error if outing entity is invalid", async () => {
@@ -63,7 +63,7 @@ describe("CreateOutgoingUseCase", () => {
     input.serviceFee = -1;
     input.name = "";
 
-    const output = await createOutgoingUseCase.execute(input);
+    const output = await createOutingUseCase.execute(input);
     const errors = output.value as DomainError[];
 
     expect(output.isLeft()).toBe(true);
@@ -79,13 +79,13 @@ describe("CreateOutgoingUseCase", () => {
     );
   });
 
-  test("should return a infra error if createOutgoingRepository fails", async () => {
+  test("should return a infra error if createOutingRepository fails", async () => {
     const input = makeInput();
-    createOutgoingRepository.create = jest
+    createOutingRepository.create = jest
       .fn()
       .mockResolvedValue(EitherFactory.left(new InfraError("Error")));
 
-    const output = await createOutgoingUseCase.execute(input);
+    const output = await createOutingUseCase.execute(input);
     const errors = output.value as InfraError[];
 
     expect(output.isLeft()).toBe(true);

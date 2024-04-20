@@ -2,13 +2,13 @@ import { Either } from "../shared/either";
 import { DomainError, InfraError } from "../shared/errors";
 import { UseCase } from "../shared/usecase";
 
-export interface CreateOutgoingUseCaseInterface
+export interface CreateOutingUseCaseInterface
   extends UseCase<
-    CreateOutgoingUseCaseInterface.Input,
-    CreateOutgoingUseCaseInterface.Output
+    CreateOutingUseCaseInterface.Input,
+    CreateOutingUseCaseInterface.Output
   > {}
 
-export namespace CreateOutgoingUseCaseInterface {
+export namespace CreateOutingUseCaseInterface {
   export type Input = {
     name: string;
     date: Date;
@@ -16,7 +16,7 @@ export namespace CreateOutgoingUseCaseInterface {
   } & Members;
   export type Output = Either<
     (InfraError | DomainError)[],
-    { outgoingId: string }
+    { outingId: string }
   >;
 
   type Members = {

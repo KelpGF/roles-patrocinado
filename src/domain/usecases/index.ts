@@ -1,1 +1,1 @@
-export * from "./create-outgoing.usecase.interface";
+export * from "./create-outing.usecase.interface";

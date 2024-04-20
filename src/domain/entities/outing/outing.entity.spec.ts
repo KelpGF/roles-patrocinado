@@ -95,15 +95,15 @@ describe("OutingEntity", () => {
       ],
     };
 
-    const outgoing = OutingEntity.restore(params);
+    const outing = OutingEntity.restore(params);
 
-    expect(outgoing).toBeInstanceOf(OutingEntity);
-    expect(outgoing.id).toBe(params.id);
-    expect(outgoing.placeName).toBe(params.placeName);
-    expect(outgoing.serviceFee).toBe(params.serviceFee);
-    expect(outgoing.date).toEqual(params.date);
-    expect(outgoing.members).toEqual(params.members);
-    expect(outgoing.createdAt).toEqual(params.createdAt);
-    expect(outgoing.updatedAt).toEqual(params.updatedAt);
+    expect(outing).toBeInstanceOf(OutingEntity);
+    expect(outing.id).toBe(params.id);
+    expect(outing.placeName).toBe(params.placeName);
+    expect(outing.serviceFee).toBe(params.serviceFee);
+    expect(outing.date).toEqual(params.date);
+    expect(outing.members).toEqual(params.members);
+    expect(outing.createdAt).toEqual(params.createdAt);
+    expect(outing.updatedAt).toEqual(params.updatedAt);
   });
 });

@@ -118,7 +118,7 @@ export class OutingEntity extends BaseEntityAbstract implements AggregateRoot {
   }
 
   static restore(
-    params: Omit<Required<Params>, "members"> & {
+    params: Required<Omit<Params, "members">> & {
       members: MemberEntityAbstract[];
     },
   ): OutingEntity {
