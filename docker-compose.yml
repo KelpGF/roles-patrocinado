@@ -2,12 +2,14 @@ version: '3.8'
 
 services:
   app:
-    build: 
+    build:
       context: .
       dockerfile: .docker/Dockerfile.dev
     image: role-patrocinado
     container_name: role-patrocinado
     entrypoint: sh .docker/entrypoint.sh
+    env_file:
+      - .env
     volumes:
       - .:/usr/app/roles-patrocinado
 
