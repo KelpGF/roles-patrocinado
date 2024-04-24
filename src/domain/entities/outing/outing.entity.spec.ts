@@ -40,7 +40,7 @@ describe("OutingEntity", () => {
     expect(entity.updatedAt).toEqual(new Date("2020-01-01"));
   });
 
-  test.only("should create a new instance with invalid values", () => {
+  test("should create a new instance with invalid values", () => {
     const params = {
       placeName: "Park",
       serviceFee: -1,
