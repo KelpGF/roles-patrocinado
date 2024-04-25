@@ -1,5 +1,6 @@
 import { Pool } from "pg";
 
+// TODO: study how to use a connection pool
 export class Database {
   private static instance: Pool;
 
