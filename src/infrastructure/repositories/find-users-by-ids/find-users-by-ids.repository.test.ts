@@ -2,20 +2,21 @@ import { UserEntity } from "@/domain/entities";
 import { UserDAO } from "../../database/DAO/users.dao";
 import { FindUserByIdsRepository } from "./find-users-by-ids.repository";
 import IdVo from "@/domain/shared/value-object/uuid.vo";
-import { Pool } from "pg";
+import { PoolClient } from "pg";
 import { Database } from "../../database/connection.pg";
 
 describe("FindUsersByIdsRepository", () => {
   let user1: UserEntity;
   let user2: UserEntity;
-  let connection: Pool;
+  let client: PoolClient;
 
-  beforeAll(() => {
-    connection = Database.getInstance();
+  beforeAll(async () => {
+    client = await Database.getInstance();
   });
 
   afterAll(() => {
-    connection.end();
+    client.release();
+    Database.end();
   });
 
   beforeEach(async () => {
@@ -32,7 +33,7 @@ describe("FindUsersByIdsRepository", () => {
       updatedAt: new Date("2021-01-01"),
     });
 
-    await connection.query(
+    await client.query(
       "INSERT INTO users (id, name, created_at, updated_at) VALUES ($1, $2, $3, $4), ($5, $6, $7, $8)",
       [
         user1.id,
@@ -47,13 +48,13 @@ describe("FindUsersByIdsRepository", () => {
     );
   });
   afterEach(async () => {
-    await connection.query("DELETE FROM users WHERE id = ANY($1)", [
+    await client.query("DELETE FROM users WHERE id = ANY($1)", [
       [user1.id, user2.id],
     ]);
   });
 
   test("should return a list of users", async () => {
-    const userDAO = new UserDAO(connection);
+    const userDAO = new UserDAO(client);
     const userRepo = new FindUserByIdsRepository(userDAO);
     const userIds = [user1.id, user2.id];
 
