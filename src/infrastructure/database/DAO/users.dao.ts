@@ -2,7 +2,7 @@ import { Pool } from "pg";
 import {
   UserDAOProtocol,
   UserProps,
-} from "../../repositories/protocol/user.dao.protocol";
+} from "../../repositories/protocols/user.dao.protocol";
 
 export class UserDAO implements UserDAOProtocol {
   constructor(private readonly client: Pool) {}

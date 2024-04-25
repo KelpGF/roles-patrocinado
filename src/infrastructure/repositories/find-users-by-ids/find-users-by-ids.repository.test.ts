@@ -19,10 +19,6 @@ describe("FindUsersByIdsRepository", () => {
   });
 
   beforeEach(async () => {
-    await connection.query("DELETE FROM users WHERE id = ANY($1)", [
-      [new IdVo().value, new IdVo().value],
-    ]);
-
     user1 = UserEntity.restore({
       id: new IdVo().value,
       name: "John Doe",
@@ -49,6 +45,11 @@ describe("FindUsersByIdsRepository", () => {
         user2.updatedAt,
       ],
     );
+  });
+  afterEach(async () => {
+    await connection.query("DELETE FROM users WHERE id = ANY($1)", [
+      [user1.id, user2.id],
+    ]);
   });
 
   test("should return a list of users", async () => {
