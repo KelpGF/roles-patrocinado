@@ -31,4 +31,8 @@ export class GuestMemberEntity extends MemberEntityAbstract {
 
     return entityErrorHandling(entity);
   }
+
+  static restore(params: Required<Params>): GuestMemberEntity {
+    return new GuestMemberEntity(params);
+  }
 }

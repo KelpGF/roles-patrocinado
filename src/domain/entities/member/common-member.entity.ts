@@ -31,4 +31,8 @@ export class CommonMemberEntity extends MemberEntityAbstract {
 
     return entityErrorHandling(entity);
   }
+
+  static restore(params: Required<Params>): CommonMemberEntity {
+    return new CommonMemberEntity(params);
+  }
 }

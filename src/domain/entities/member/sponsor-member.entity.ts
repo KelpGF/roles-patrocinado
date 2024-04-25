@@ -43,4 +43,8 @@ export class SponsorMemberEntity extends MemberEntityAbstract {
 
     return entityErrorHandling(entity);
   }
+
+  static restore(params: Required<Params>): SponsorMemberEntity {
+    return new SponsorMemberEntity(params);
+  }
 }

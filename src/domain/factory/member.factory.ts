@@ -17,6 +17,15 @@ const memberStrategy = {
   guest: (params: MemberEntityParams) => GuestMemberEntity.create(params),
 };
 
+const memberRestoreFactory = {
+  common: (params: Required<MemberEntityParams>) =>
+    CommonMemberEntity.restore(params),
+  sponsor: (params: Required<SponsorMemberEntityParams>) =>
+    SponsorMemberEntity.restore(params),
+  guest: (params: Required<MemberEntityParams>) =>
+    GuestMemberEntity.restore(params),
+};
+
 export default class MemberFactory {
   static create(
     type: MembersTypeEnum,
@@ -25,6 +34,16 @@ export default class MemberFactory {
     CommonMemberEntity | SponsorMemberEntity | GuestMemberEntity
   > {
     const memberFactory = memberStrategy[type] || memberStrategy.common;
+
+    return memberFactory(params);
+  }
+
+  static restore(
+    type: MembersTypeEnum,
+    params: Required<Params>,
+  ): CommonMemberEntity | SponsorMemberEntity | GuestMemberEntity {
+    const memberFactory =
+      memberRestoreFactory[type] || memberRestoreFactory.common;
 
     return memberFactory(params);
   }

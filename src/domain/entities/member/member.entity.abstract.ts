@@ -27,7 +27,7 @@ export default abstract class MemberEntityAbstract extends BaseEntityAbstract {
   abstract get isSponsor(): boolean;
 
   get sponsorValue(): number {
-    return this._sponsorValue;
+    return this._sponsorValue || 0;
   }
 
   get user(): UserEntity {
