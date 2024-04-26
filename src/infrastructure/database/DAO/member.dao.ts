@@ -1,14 +1,14 @@
 import { InsertManyMemberDAOProtocol } from "@/infrastructure/repositories/protocols/member-insert.dao.protocol";
 import { PoolClient } from "pg";
 
-export class MemberDAO implements InsertManyMemberDAOProtocol {
+export class MemberDAO implements InsertManyMemberDAOProtocol<PoolClient> {
   constructor(private readonly client: PoolClient) {}
 
   // TODO: refactor
   async insertMany({
     members,
     dbContext = this.client,
-  }: InsertManyMemberDAOProtocol.Input): Promise<void> {
+  }: InsertManyMemberDAOProtocol.Input<PoolClient>): Promise<void> {
     const queryStringValues = Array.from(
       { length: members.length },
       (_, i) =>

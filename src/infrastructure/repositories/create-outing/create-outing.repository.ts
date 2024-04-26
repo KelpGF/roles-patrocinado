@@ -1,4 +1,3 @@
-import { PoolClient } from "pg";
 import { CreateOutingRepositoryProtocol } from "@/application/protocols/create-outing.repository.protocol";
 import EitherFactory from "@/domain/shared/either";
 import { InfraError } from "@/domain/shared/errors";
@@ -6,11 +5,13 @@ import { UnityOfWorkInterface } from "@/infrastructure/database/types/uow.interf
 import { InsertManyMemberDAOProtocol } from "../protocols/member-insert.dao.protocol";
 import { InsertOutingDAOProtocol } from "../protocols/outing-insert.dao.protocol";
 
-export class CreateOutingRepository implements CreateOutingRepositoryProtocol {
+export class CreateOutingRepository<T>
+  implements CreateOutingRepositoryProtocol
+{
   constructor(
-    private readonly uow: UnityOfWorkInterface<PoolClient>,
-    private readonly memberDAO: InsertManyMemberDAOProtocol,
-    private readonly outingDAO: InsertOutingDAOProtocol,
+    private readonly uow: UnityOfWorkInterface<T>,
+    private readonly memberDAO: InsertManyMemberDAOProtocol<T>,
+    private readonly outingDAO: InsertOutingDAOProtocol<T>,
   ) {}
 
   async create({

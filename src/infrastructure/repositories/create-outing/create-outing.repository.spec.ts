@@ -18,8 +18,8 @@ import { UnityOfWork } from "@/infrastructure/database/DAO/uow.dao";
 describe("CreateOutingRepository", () => {
   let client: PoolClient;
   let uow: UnityOfWorkInterface<PoolClient>;
-  let memberDAO: InsertManyMemberDAOProtocol;
-  let outingDAO: InsertOutingDAOProtocol;
+  let memberDAO: InsertManyMemberDAOProtocol<PoolClient>;
+  let outingDAO: InsertOutingDAOProtocol<PoolClient>;
   let sut: CreateOutingRepositoryProtocol;
 
   let member1: MemberEntityAbstract;
@@ -32,7 +32,7 @@ describe("CreateOutingRepository", () => {
     memberDAO = new MemberDAO({} as any);
     outingDAO = new OutingDAO({} as any);
     uow = new UnityOfWork(client);
-    sut = new CreateOutingRepository(uow, memberDAO, outingDAO);
+    sut = new CreateOutingRepository<PoolClient>(uow, memberDAO, outingDAO);
   });
   afterAll(() => {
     Database.end();

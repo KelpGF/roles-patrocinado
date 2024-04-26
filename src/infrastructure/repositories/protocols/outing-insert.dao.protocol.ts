@@ -1,5 +1,3 @@
-import { PoolClient } from "pg";
-
 export type OutingProps = {
   id: string;
   placeName: string;
@@ -9,16 +7,16 @@ export type OutingProps = {
   updatedAt: Date;
 };
 
-export interface InsertOutingDAOProtocol {
+export interface InsertOutingDAOProtocol<T> {
   insertOne(
-    input: InsertOutingDAOProtocol.Input,
+    input: InsertOutingDAOProtocol.Input<T>,
   ): Promise<InsertOutingDAOProtocol.Output>;
 }
 
 export namespace InsertOutingDAOProtocol {
-  export type Input = {
+  export type Input<T> = {
     outing: OutingProps;
-    dbContext?: PoolClient;
+    dbContext?: T;
   };
   export type Output = { outingId: string };
 }

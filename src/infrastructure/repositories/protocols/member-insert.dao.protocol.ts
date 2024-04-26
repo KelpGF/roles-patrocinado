@@ -1,5 +1,3 @@
-import { PoolClient } from "pg";
-
 export type MemberProps = {
   id: string;
   outingId: string;
@@ -11,13 +9,13 @@ export type MemberProps = {
   updatedAt: Date;
 };
 
-export interface InsertManyMemberDAOProtocol {
-  insertMany(input: InsertManyMemberDAOProtocol.Input): Promise<void>;
+export interface InsertManyMemberDAOProtocol<T> {
+  insertMany(input: InsertManyMemberDAOProtocol.Input<T>): Promise<void>;
 }
 
 export namespace InsertManyMemberDAOProtocol {
-  export type Input = {
+  export type Input<T> = {
     members: MemberProps[];
-    dbContext?: PoolClient;
+    dbContext?: T;
   };
 }
