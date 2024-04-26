@@ -63,7 +63,7 @@ describe("OutingEntity", () => {
     expect(value).toEqual({
       errors: [
         new DomainError(
-          'Outing: Member: Sponsor Kelps has a invalid sponsored value "undefined"',
+          'Outing: Member: Sponsor Kelps has a invalid sponsored value "0"',
         ),
         new DomainError(
           'Outing: Param Place name "Park" must have at least 5 characters',

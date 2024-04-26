@@ -1,6 +1,6 @@
 import { PoolClient } from "pg";
-import { MemberDAOProtocol } from "../protocols/member.dao.protocol";
-import { OutingDAOProtocol } from "../protocols/outing.dao.protocol";
+import { InsertManyMemberDAOProtocol } from "../protocols/member-insert.dao.protocol";
+import { InsertOutingDAOProtocol } from "../protocols/outing-insert.dao.protocol";
 import { Database } from "@/infrastructure/database/connection.pg";
 import { MemberDAO } from "@/infrastructure/database/DAO/member.dao";
 import { OutingDAO } from "@/infrastructure/database/DAO/outing.dao";
@@ -12,11 +12,14 @@ import IdVo from "@/domain/shared/value-object/uuid.vo";
 import { CreateOutingRepositoryProtocol } from "@/application/protocols/create-outing.repository.protocol";
 import { CreateOutingRepository } from "./create-outing.repository";
 import { InfraError } from "@/domain/shared/errors";
+import { UnityOfWorkInterface } from "@/infrastructure/database/types/uow.interface";
+import { UnityOfWork } from "@/infrastructure/database/DAO/uow.dao";
 
 describe("CreateOutingRepository", () => {
   let client: PoolClient;
-  let memberDAO: MemberDAOProtocol;
-  let outingDAO: OutingDAOProtocol;
+  let uow: UnityOfWorkInterface<PoolClient>;
+  let memberDAO: InsertManyMemberDAOProtocol;
+  let outingDAO: InsertOutingDAOProtocol;
   let sut: CreateOutingRepositoryProtocol;
 
   let member1: MemberEntityAbstract;
@@ -26,9 +29,10 @@ describe("CreateOutingRepository", () => {
 
   beforeAll(async () => {
     client = await Database.getInstance();
-    memberDAO = new MemberDAO(client);
-    outingDAO = new OutingDAO(client);
-    sut = new CreateOutingRepository(memberDAO, outingDAO);
+    memberDAO = new MemberDAO({} as any);
+    outingDAO = new OutingDAO({} as any);
+    uow = new UnityOfWork(client);
+    sut = new CreateOutingRepository(uow, memberDAO, outingDAO);
   });
   afterAll(() => {
     client.release();
@@ -87,6 +91,7 @@ describe("CreateOutingRepository", () => {
     ]);
     await client.query("DELETE FROM outings WHERE id = $1", [outing.id]);
   });
+
   test("should create an outing", async () => {
     const result = await sut.create({ outing });
     const outingResult = await client.query(
@@ -109,12 +114,18 @@ describe("CreateOutingRepository", () => {
 
   test("should return an infra error", async () => {
     const error = new Error("any_error");
-    jest.spyOn(outingDAO, "insertOne").mockRejectedValueOnce(error);
+    jest.spyOn(memberDAO, "insertMany").mockRejectedValueOnce(error);
     const result = await sut.create({ outing });
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toEqual(
       new InfraError(`Error on create outing: ${error.message}`),
     );
+
+    const outingData = await client.query(
+      "SELECT * FROM outings WHERE id = $1",
+      [outing.id],
+    );
+    expect(outingData.rows.length).toBe(0);
   });
 });

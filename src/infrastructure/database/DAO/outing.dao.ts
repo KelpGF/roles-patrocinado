@@ -1,16 +1,17 @@
-import { OutingDAOProtocol } from "@/infrastructure/repositories/protocols/outing.dao.protocol";
+import { InsertOutingDAOProtocol } from "@/infrastructure/repositories/protocols/outing-insert.dao.protocol";
 import { PoolClient } from "pg";
 
-export class OutingDAO implements OutingDAOProtocol {
+export class OutingDAO implements InsertOutingDAOProtocol {
   constructor(private readonly client: PoolClient) {}
 
   async insertOne({
     outing,
-  }: OutingDAOProtocol.Input): Promise<OutingDAOProtocol.Output> {
+    dbContext = this.client,
+  }: InsertOutingDAOProtocol.Input): Promise<InsertOutingDAOProtocol.Output> {
     const query =
       "INSERT INTO outings (id, place_name, service_fee, date, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id";
 
-    const result = await this.client.query<{ id: string }>(query, [
+    const result = await dbContext.query<{ id: string }>(query, [
       outing.id,
       outing.placeName,
       outing.serviceFee,
