@@ -1,12 +1,12 @@
-import { Pool } from "pg";
+import { Pool, PoolClient } from "pg";
 
-// TODO: study how to use a connection pool
 export class Database {
   private static instance: Pool;
+  private static client: PoolClient;
 
   private constructor() {}
 
-  static async getInstance() {
+  static async getClient() {
     if (!Database.instance) {
       Database.instance = new Pool({
         connectionString: process.env.DATABASE_CONNECTION_STRING,
@@ -17,11 +17,14 @@ export class Database {
       });
     }
 
-    return Database.instance.connect();
+    const client = await Database.instance.connect();
+    Database.client = client;
+    return client;
   }
 
   static async end() {
     if (Database.instance) {
+      Database.client.release();
       await Database.instance.end();
       console.log("Database disconnected");
     }

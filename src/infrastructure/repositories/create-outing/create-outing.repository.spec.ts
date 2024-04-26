@@ -28,14 +28,13 @@ describe("CreateOutingRepository", () => {
   let outing: OutingEntity;
 
   beforeAll(async () => {
-    client = await Database.getInstance();
+    client = await Database.getClient();
     memberDAO = new MemberDAO({} as any);
     outingDAO = new OutingDAO({} as any);
     uow = new UnityOfWork(client);
     sut = new CreateOutingRepository(uow, memberDAO, outingDAO);
   });
   afterAll(() => {
-    client.release();
     Database.end();
   });
 

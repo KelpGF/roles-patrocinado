@@ -11,11 +11,10 @@ describe("FindUsersByIdsRepository", () => {
   let client: PoolClient;
 
   beforeAll(async () => {
-    client = await Database.getInstance();
+    client = await Database.getClient();
   });
 
   afterAll(() => {
-    client.release();
     Database.end();
   });
 
