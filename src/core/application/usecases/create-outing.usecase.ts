@@ -6,80 +6,91 @@ import { MembersTypeEnum } from "@/domain/shared/enum/members-type.enum";
 import { Params as CreateMemberParams } from "@/domain/factory/member.factory";
 import { FindUserByIdsRepositoryProtocol } from "@/domain/repositories/find-users-by-ids.repository.protocol";
 
+type InputMembers = CreateOutingUseCaseInterface.Input["members"];
+type MembersList = { type: MembersTypeEnum; data: CreateMemberParams }[];
 export class CreateOutingUseCase implements CreateOutingUseCaseInterface {
   constructor(
-    private readonly createOutingRepository: CreateOutingRepositoryProtocol,
-    private readonly findUserByIdsRepositoryProtocol: FindUserByIdsRepositoryProtocol,
+    private readonly outingRepository: CreateOutingRepositoryProtocol,
+    private readonly userRepository: FindUserByIdsRepositoryProtocol,
   ) {}
 
   async execute(
     input: CreateOutingUseCaseInterface.Input,
   ): Promise<CreateOutingUseCaseInterface.Output> {
-    const membersList = await this.makeMembersList(input.members);
-    const outingParams = {
+    const membersList = await this.generateMembersList(input.members);
+
+    const entityParams = {
       placeName: input.name,
       serviceFee: input.serviceFee,
       date: input.date,
       members: membersList,
     };
-    const entityResult = OutingEntity.create(outingParams);
+    const entityResult = OutingEntity.create(entityParams);
     if (entityResult.isLeft()) {
       const errors = entityResult.value.errors;
       return EitherFactory.left(errors);
     }
-    const outing = entityResult.value;
 
-    const createOutingInput = { outing: outing };
-    const createOutingOutput =
-      await this.createOutingRepository.create(createOutingInput);
-    if (createOutingOutput.isLeft()) {
-      return EitherFactory.left([createOutingOutput.value]);
+    const outing = entityResult.value;
+    const outingRepositoryInput = { outing: outing };
+    const outingRepositoryOutput = await this.outingRepository.create(
+      outingRepositoryInput,
+    );
+    if (outingRepositoryOutput.isLeft()) {
+      return EitherFactory.left([outingRepositoryOutput.value]);
     }
 
-    const outingId = createOutingOutput.value.outingId;
+    const outingId = outingRepositoryOutput.value.outingId;
     return EitherFactory.right({ outingId: outingId });
   }
 
-  private async makeMembersList({
+  private async generateMembersList({
     commonMembers,
     guestMembers,
     sponsorsMembers,
-  }: CreateOutingUseCaseInterface.Input["members"]): Promise<
-    { type: MembersTypeEnum; data: CreateMemberParams }[]
-  > {
-    const commonIds = commonMembers.map((member) => member.userId);
-    const guestIds = guestMembers.map((member) => member.userId);
-    const sponsorsIds = sponsorsMembers.map((member) => member.userId);
+  }: InputMembers): Promise<MembersList> {
+    const memberMap: Map<
+      string,
+      { type: MembersTypeEnum; sponsoredValue?: number }
+    > = new Map();
+    const ids: string[] = [];
 
-    const [commonUsers, guestUsers, sponsorsUsers] = await Promise.all([
-      this.findUserByIdsRepositoryProtocol.findByIds({ userIds: commonIds }),
-      this.findUserByIdsRepositoryProtocol.findByIds({ userIds: guestIds }),
-      this.findUserByIdsRepositoryProtocol.findByIds({ userIds: sponsorsIds }),
-    ]);
+    commonMembers.forEach((member) => {
+      memberMap.set(member.userId, { type: MembersTypeEnum.COMMON });
+      ids.push(member.userId);
+    });
+    guestMembers.forEach((member) => {
+      memberMap.set(member.userId, { type: MembersTypeEnum.GUEST });
+      ids.push(member.userId);
+    });
+    sponsorsMembers.forEach((member) => {
+      memberMap.set(member.userId, {
+        type: MembersTypeEnum.SPONSOR,
+        sponsoredValue: member.sponsoredValue,
+      });
+      ids.push(member.userId);
+    });
 
-    const result: { type: MembersTypeEnum; data: CreateMemberParams }[] = []
-      .concat(
-        commonUsers.map((user) => ({
-          type: MembersTypeEnum.COMMON,
-          data: { user },
-        })),
-      )
-      .concat(
-        guestUsers.map((user) => ({
-          type: MembersTypeEnum.GUEST,
-          data: { user },
-        })),
-      )
-      .concat(
-        sponsorsUsers.map((user) => ({
-          type: MembersTypeEnum.SPONSOR,
-          data: {
-            user,
-            sponsoredValue: sponsorsMembers.find((m) => m.userId === user.id)
-              ?.sponsoredValue,
-          },
-        })),
-      );
+    const users = await this.userRepository.findByIds({
+      userIds: ids,
+    });
+
+    const result: MembersList = [];
+
+    for (const user of users) {
+      const member = memberMap.get(user.id);
+      if (!member) continue;
+
+      result.push({
+        type: member.type,
+        data: {
+          user: user,
+          sponsoredValue: member.sponsoredValue,
+        },
+      });
+    }
+
+    memberMap.clear();
 
     return result;
   }

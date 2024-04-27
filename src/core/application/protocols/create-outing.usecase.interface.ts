@@ -24,12 +24,12 @@ export namespace CreateOutingUseCaseInterface {
       commonMembers: {
         userId: string;
       }[];
+      guestMembers: {
+        userId: string;
+      }[];
       sponsorsMembers: {
         userId: string;
         sponsoredValue: number;
-      }[];
-      guestMembers: {
-        userId: string;
       }[];
     };
   };

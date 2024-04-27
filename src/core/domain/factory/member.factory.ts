@@ -1,6 +1,8 @@
 import { CommonMemberEntity } from "../entities/member/common-member.entity";
 import { GuestMemberEntity } from "../entities/member/guest-member.entity";
-import { Params as MemberEntityParams } from "../entities/member/member.entity.abstract";
+import MemberEntityAbstract, {
+  Params as MemberEntityParams,
+} from "../entities/member/member.entity.abstract";
 import {
   SponsorMemberEntity,
   Params as SponsorMemberEntityParams,
@@ -10,7 +12,7 @@ import { MembersTypeEnum } from "../shared/enum/members-type.enum";
 
 export type Params = MemberEntityParams | SponsorMemberEntityParams;
 
-const memberStrategy = {
+const memberCreateStrategy = {
   common: (params: MemberEntityParams) => CommonMemberEntity.create(params),
   sponsor: (params: SponsorMemberEntityParams) =>
     SponsorMemberEntity.create(params),
@@ -30,10 +32,9 @@ export default class MemberFactory {
   static create(
     type: MembersTypeEnum,
     params: Params,
-  ): CreateEntityResult<
-    CommonMemberEntity | SponsorMemberEntity | GuestMemberEntity
-  > {
-    const memberFactory = memberStrategy[type] || memberStrategy.common;
+  ): CreateEntityResult<MemberEntityAbstract> {
+    const memberFactory =
+      memberCreateStrategy[type] || memberCreateStrategy.common;
 
     return memberFactory(params);
   }
