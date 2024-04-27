@@ -52,9 +52,9 @@ export class CreateOutingUseCase implements CreateOutingUseCaseInterface {
     const sponsorsIds = sponsorsMembers.map((member) => member.userId);
 
     const [commonUsers, guestUsers, sponsorsUsers] = await Promise.all([
-      this.findUserByIdsRepositoryProtocol.create({ userIds: commonIds }),
-      this.findUserByIdsRepositoryProtocol.create({ userIds: guestIds }),
-      this.findUserByIdsRepositoryProtocol.create({ userIds: sponsorsIds }),
+      this.findUserByIdsRepositoryProtocol.findByIds({ userIds: commonIds }),
+      this.findUserByIdsRepositoryProtocol.findByIds({ userIds: guestIds }),
+      this.findUserByIdsRepositoryProtocol.findByIds({ userIds: sponsorsIds }),
     ]);
 
     const result: { type: MembersTypeEnum; data: CreateMemberParams }[] = []

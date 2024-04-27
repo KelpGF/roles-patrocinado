@@ -57,7 +57,7 @@ describe("FindUsersByIdsRepository", () => {
     const userRepo = new FindUserByIdsRepository(userDAO);
     const userIds = [user1.id, user2.id];
 
-    const users = await userRepo.create({ userIds });
+    const users = await userRepo.findByIds({ userIds });
 
     expect(users).toEqual([user1, user2]);
   });
@@ -70,7 +70,7 @@ describe("FindUsersByIdsRepository", () => {
     });
     const userIds = [new IdVo().value, new IdVo().value];
 
-    const users = await userRepo.create({ userIds });
+    const users = await userRepo.findByIds({ userIds });
 
     expect(users).toEqual([]);
   });

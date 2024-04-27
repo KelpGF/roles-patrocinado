@@ -1,7 +1,7 @@
 import { UserEntity } from "@/domain/entities";
 
 export interface FindUserByIdsRepositoryProtocol {
-  create(
+  findByIds(
     input: FindUserByIdsRepositoryProtocol.Input,
   ): FindUserByIdsRepositoryProtocol.Output;
 }

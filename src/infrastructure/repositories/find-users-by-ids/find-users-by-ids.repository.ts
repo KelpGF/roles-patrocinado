@@ -7,7 +7,7 @@ export class FindUserByIdsRepository
 {
   constructor(private readonly userDAO: UserDAOProtocol) {}
 
-  async create(
+  async findByIds(
     input: FindUserByIdsRepositoryProtocol.Input,
   ): FindUserByIdsRepositoryProtocol.Output {
     try {

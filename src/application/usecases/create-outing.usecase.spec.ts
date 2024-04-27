@@ -17,7 +17,7 @@ const makeInput = (): CreateOutingUseCaseInterface.Input => ({
 
 describe("CreateOutingUseCase", () => {
   let findUserByIdsRepositoryProtocol = {
-    create: jest.fn(),
+    findByIds: jest.fn(),
   };
   let createOutingRepository = {
     create: jest.fn().mockResolvedValue({ outingId: "1" }),
@@ -31,15 +31,17 @@ describe("CreateOutingUseCase", () => {
         .mockResolvedValue(EitherFactory.right({ outingId: "1" })),
     };
     findUserByIdsRepositoryProtocol = {
-      create: jest.fn().mockImplementation((params: { userIds: string[] }) => {
-        return Promise.resolve(
-          params.userIds.map(
-            (userId) =>
-              UserEntity.create({ id: userId, name: `User ${userId}` })
-                .value as UserEntity,
-          ),
-        );
-      }),
+      findByIds: jest
+        .fn()
+        .mockImplementation((params: { userIds: string[] }) => {
+          return Promise.resolve(
+            params.userIds.map(
+              (userId) =>
+                UserEntity.create({ id: userId, name: `User ${userId}` })
+                  .value as UserEntity,
+            ),
+          );
+        }),
     };
     createOutingUseCase = new CreateOutingUseCase(
       createOutingRepository,
