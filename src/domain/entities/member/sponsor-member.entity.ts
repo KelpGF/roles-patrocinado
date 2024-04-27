@@ -17,7 +17,7 @@ export class SponsorMemberEntity extends MemberEntityAbstract {
       updatedAt: params.updatedAt,
       user: params.user,
     });
-    this._sponsorValue = params.sponsoredValue;
+    this._sponsoredValue = params.sponsoredValue;
     this.validate();
   }
 
@@ -33,8 +33,8 @@ export class SponsorMemberEntity extends MemberEntityAbstract {
     return true;
   }
 
-  changeSponsorValue(value: number): void {
-    this._sponsorValue = value;
+  changeSponsoredValue(value: number): void {
+    this._sponsoredValue = value;
     this.validate();
   }
 

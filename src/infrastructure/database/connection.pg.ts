@@ -1,30 +1,25 @@
-import { Pool, PoolClient } from "pg";
+import { Pool } from "pg";
 
 export class Database {
   private static instance: Pool;
-  private static client: PoolClient;
 
   private constructor() {}
 
-  static async getClient() {
+  static getInstance() {
     if (!Database.instance) {
       Database.instance = new Pool({
         connectionString: process.env.DATABASE_CONNECTION_STRING,
       });
-
       Database.instance.on("connect", () => {
         console.log("Database connected");
       });
     }
 
-    const client = await Database.instance.connect();
-    Database.client = client;
-    return client;
+    return Database.instance;
   }
 
   static async end() {
     if (Database.instance) {
-      Database.client.release();
       await Database.instance.end();
       console.log("Database disconnected");
     }

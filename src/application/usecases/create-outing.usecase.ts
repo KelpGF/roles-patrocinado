@@ -76,7 +76,7 @@ export class CreateOutingUseCase implements CreateOutingUseCaseInterface {
           data: {
             user,
             sponsoredValue: sponsorsMembers.find((m) => m.userId === user.id)
-              ?.sponsorValue,
+              ?.sponsoredValue,
           },
         })),
       );

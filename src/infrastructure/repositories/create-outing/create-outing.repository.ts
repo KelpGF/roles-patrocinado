@@ -37,7 +37,7 @@ export class CreateOutingRepository<T>
           userId: member.user.id,
           isGuest: member.isGuest,
           isSponsor: member.isSponsor,
-          sponsorValue: member.sponsorValue,
+          sponsoredValue: member.sponsoredValue,
           createdAt: member.createdAt,
           updatedAt: member.updatedAt,
         })),

@@ -1,32 +1,42 @@
 import { InsertManyMemberDAOProtocol } from "@/infrastructure/repositories/protocols/member-insert.dao.protocol";
-import { PoolClient } from "pg";
+import { Pool, PoolClient } from "pg";
 
 export class MemberDAO implements InsertManyMemberDAOProtocol<PoolClient> {
-  constructor(private readonly client: PoolClient) {}
+  constructor(private readonly client: Pool) {}
 
-  // TODO: refactor
   async insertMany({
     members,
-    dbContext = this.client,
+    dbContext,
   }: InsertManyMemberDAOProtocol.Input<PoolClient>): Promise<void> {
-    const queryStringValues = Array.from(
-      { length: members.length },
-      (_, i) =>
-        `($${i * 8 + 1}, $${i * 8 + 2}, $${i * 8 + 3}, $${i * 8 + 4}, $${i * 8 + 5}, $${i * 8 + 6}, $${i * 8 + 7}, $${i * 8 + 8})`,
-    ).join(", ");
-    const queryValues = members.map((member) => [
-      member.id,
-      member.outingId,
-      member.userId,
-      member.isGuest,
-      member.isSponsor,
-      member.sponsorValue,
-      member.createdAt,
-      member.updatedAt,
-    ]);
+    const queryStringValues = [];
+    const queryValues = [];
 
-    const query = `INSERT INTO members (id, outing_id, user_id, is_guest, is_sponsor, sponsored_value, created_at, updated_at) VALUES ${queryStringValues}`;
+    for (const member of members) {
+      const values = [
+        member.id,
+        member.outingId,
+        member.userId,
+        member.isGuest,
+        member.isSponsor,
+        member.sponsoredValue,
+        member.createdAt,
+        member.updatedAt,
+      ];
+      const offset = queryValues.length;
 
-    await dbContext.query(query, queryValues.flat());
+      queryStringValues.push(
+        `($${offset + 1}, $${offset + 2}, $${offset + 3}, $${offset + 4}, $${offset + 5}, $${offset + 6}, $${offset + 7}, $${offset + 8})`,
+      );
+      queryValues.push(...values);
+    }
+
+    const queryString = `INSERT INTO members (id, outing_id, user_id, is_guest, is_sponsor, sponsored_value, created_at, updated_at) VALUES ${queryStringValues}`;
+
+    if (dbContext) {
+      await dbContext.query(queryString, queryValues.flat());
+      return;
+    }
+
+    await this.client.query(queryString, queryValues.flat());
   }
 }

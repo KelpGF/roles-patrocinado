@@ -1,4 +1,4 @@
-import { PoolClient } from "pg";
+import { Pool, PoolClient } from "pg";
 import { InsertManyMemberDAOProtocol } from "../protocols/member-insert.dao.protocol";
 import { InsertOutingDAOProtocol } from "../protocols/outing-insert.dao.protocol";
 import { Database } from "@/infrastructure/database/connection.pg";
@@ -16,7 +16,7 @@ import { UnityOfWorkInterface } from "@/infrastructure/database/types/uow.interf
 import { UnityOfWork } from "@/infrastructure/database/DAO/uow.dao";
 
 describe("CreateOutingRepository", () => {
-  let client: PoolClient;
+  let connection: Pool;
   let uow: UnityOfWorkInterface<PoolClient>;
   let memberDAO: InsertManyMemberDAOProtocol<PoolClient>;
   let outingDAO: InsertOutingDAOProtocol<PoolClient>;
@@ -28,10 +28,10 @@ describe("CreateOutingRepository", () => {
   let outing: OutingEntity;
 
   beforeAll(async () => {
-    client = await Database.getClient();
+    connection = Database.getInstance();
     memberDAO = new MemberDAO({} as any);
     outingDAO = new OutingDAO({} as any);
-    uow = new UnityOfWork(client);
+    uow = new UnityOfWork(connection);
     sut = new CreateOutingRepository<PoolClient>(uow, memberDAO, outingDAO);
   });
   afterAll(() => {
@@ -85,19 +85,19 @@ describe("CreateOutingRepository", () => {
     });
   });
   afterEach(async () => {
-    await client.query("DELETE FROM members WHERE id = ANY($1)", [
+    await connection.query("DELETE FROM members WHERE id = ANY($1)", [
       [member1.id, member2.id, member3.id],
     ]);
-    await client.query("DELETE FROM outings WHERE id = $1", [outing.id]);
+    await connection.query("DELETE FROM outings WHERE id = $1", [outing.id]);
   });
 
   test("should create an outing", async () => {
     const result = await sut.create({ outing });
-    const outingResult = await client.query(
+    const outingResult = await connection.query(
       "SELECT * FROM outings WHERE id = $1",
       [outing.id],
     );
-    const membersResult = await client.query(
+    const membersResult = await connection.query(
       "SELECT * FROM members WHERE outing_id = $1",
       [outing.id],
     );
@@ -121,7 +121,7 @@ describe("CreateOutingRepository", () => {
       new InfraError(`Error on create outing: ${error.message}`),
     );
 
-    const outingData = await client.query(
+    const outingData = await connection.query(
       "SELECT * FROM outings WHERE id = $1",
       [outing.id],
     );

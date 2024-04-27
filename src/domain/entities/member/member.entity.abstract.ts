@@ -9,7 +9,7 @@ export type Params = CreateEntityParams<{
 }>;
 export default abstract class MemberEntityAbstract extends BaseEntityAbstract {
   protected _user: UserEntity;
-  protected _sponsorValue: number;
+  protected _sponsoredValue: number;
 
   protected constructor(params: Params) {
     super({
@@ -19,15 +19,15 @@ export default abstract class MemberEntityAbstract extends BaseEntityAbstract {
       context: "Member",
     });
     this._user = params.user;
-    this._sponsorValue = 0;
+    this._sponsoredValue = 0;
   }
 
   abstract get type(): MembersTypeEnum;
   abstract get isGuest(): boolean;
   abstract get isSponsor(): boolean;
 
-  get sponsorValue(): number {
-    return this._sponsorValue || 0;
+  get sponsoredValue(): number {
+    return this._sponsoredValue || 0;
   }
 
   get user(): UserEntity {
@@ -45,16 +45,16 @@ export default abstract class MemberEntityAbstract extends BaseEntityAbstract {
 
     if (
       this.isSponsor &&
-      (this.sponsorValue < 50 || Number.isNaN(Number(this.sponsorValue)))
+      (this.sponsoredValue < 50 || Number.isNaN(Number(this.sponsoredValue)))
     ) {
       this.addNotification(
         new DomainError(
-          `Sponsor ${this._user.name} has a invalid sponsored value "${this.sponsorValue}"`,
+          `Sponsor ${this._user.name} has a invalid sponsored value "${this.sponsoredValue}"`,
         ),
       );
     }
 
-    if (this.isGuest && this.sponsorValue > 0) {
+    if (this.isGuest && this.sponsoredValue > 0) {
       this.addNotification(
         new DomainError(
           `Member ${this._user.name} cannot be a guest and have a sponsored value at the same time`,

@@ -2,16 +2,16 @@ import { UserEntity } from "@/domain/entities";
 import { UserDAO } from "../../database/DAO/users.dao";
 import { FindUserByIdsRepository } from "./find-users-by-ids.repository";
 import IdVo from "@/domain/shared/value-object/uuid.vo";
-import { PoolClient } from "pg";
+import { Pool } from "pg";
 import { Database } from "../../database/connection.pg";
 
 describe("FindUsersByIdsRepository", () => {
   let user1: UserEntity;
   let user2: UserEntity;
-  let client: PoolClient;
+  let client: Pool;
 
   beforeAll(async () => {
-    client = await Database.getClient();
+    client = await Database.getInstance();
   });
 
   afterAll(() => {

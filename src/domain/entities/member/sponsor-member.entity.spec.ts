@@ -55,7 +55,7 @@ describe("SponsorMemberEntity", () => {
     expect(entity.user).toEqual(user);
     expect(entity.isGuest).toBeFalsy();
     expect(entity.isSponsor).toBeTruthy();
-    expect(entity.sponsorValue).toBe(params.sponsoredValue);
+    expect(entity.sponsoredValue).toBe(params.sponsoredValue);
     expect(entity.type).toBe(MembersTypeEnum.SPONSOR);
     expect(entity.notifications).toEqual([]);
   });
@@ -87,15 +87,15 @@ describe("SponsorMemberEntity", () => {
 
     const entity = SponsorMemberEntity.create(params)
       .value as SponsorMemberEntity;
-    expect(entity.sponsorValue).toBe(100);
+    expect(entity.sponsoredValue).toBe(100);
     expect(entity.notifications).toEqual([]);
 
-    entity.changeSponsorValue(50);
-    expect(entity.sponsorValue).toBe(50);
+    entity.changeSponsoredValue(50);
+    expect(entity.sponsoredValue).toBe(50);
     expect(entity.notifications).toEqual([]);
 
-    entity.changeSponsorValue(0);
-    expect(entity.sponsorValue).toBe(0);
+    entity.changeSponsoredValue(0);
+    expect(entity.sponsoredValue).toBe(0);
     expect(entity.notifications).toEqual([
       {
         context: "Member",

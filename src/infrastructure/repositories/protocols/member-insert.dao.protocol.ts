@@ -4,7 +4,7 @@ export type MemberProps = {
   userId: string;
   isGuest: boolean;
   isSponsor: boolean;
-  sponsorValue: number;
+  sponsoredValue: number;
   createdAt: Date;
   updatedAt: Date;
 };

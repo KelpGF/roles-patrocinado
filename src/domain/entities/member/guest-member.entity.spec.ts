@@ -27,7 +27,7 @@ describe("GuestMemberEntity", () => {
     expect(entity.user).toEqual(user);
     expect(entity.isGuest).toBeTruthy();
     expect(entity.isSponsor).toBeFalsy();
-    expect(entity.sponsorValue).toBe(0);
+    expect(entity.sponsoredValue).toBe(0);
     expect(entity.type).toBe(MembersTypeEnum.GUEST);
     expect(entity.notifications).toEqual([]);
   });
@@ -52,7 +52,7 @@ describe("GuestMemberEntity", () => {
     expect(entity.user).toEqual(user);
     expect(entity.isGuest).toBeTruthy();
     expect(entity.isSponsor).toBeFalsy();
-    expect(entity.sponsorValue).toBe(0);
+    expect(entity.sponsoredValue).toBe(0);
     expect(entity.type).toBe(MembersTypeEnum.GUEST);
     expect(entity.notifications).toEqual([]);
   });

@@ -1,11 +1,11 @@
-import { PoolClient } from "pg";
+import { Pool } from "pg";
 import {
   UserDAOProtocol,
   UserProps,
 } from "../../repositories/protocols/user.dao.protocol";
 
 export class UserDAO implements UserDAOProtocol {
-  constructor(private readonly client: PoolClient) {}
+  constructor(private readonly client: Pool) {}
 
   async inList<T>(
     field: keyof UserProps,

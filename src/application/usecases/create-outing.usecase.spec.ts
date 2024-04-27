@@ -10,7 +10,7 @@ const makeInput = (): CreateOutingUseCaseInterface.Input => ({
   date: new Date(),
   members: {
     commonMembers: [{ userId: "1" }, { userId: "2" }],
-    sponsorsMembers: [{ userId: "3", sponsorValue: 50 }],
+    sponsorsMembers: [{ userId: "3", sponsoredValue: 50 }],
     guestMembers: [{ userId: "4" }],
   },
 });

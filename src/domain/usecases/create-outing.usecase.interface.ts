@@ -26,7 +26,7 @@ export namespace CreateOutingUseCaseInterface {
       }[];
       sponsorsMembers: {
         userId: string;
-        sponsorValue: number;
+        sponsoredValue: number;
       }[];
       guestMembers: {
         userId: string;

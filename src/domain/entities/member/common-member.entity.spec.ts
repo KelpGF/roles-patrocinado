@@ -27,7 +27,7 @@ describe("CommonMemberEntity", () => {
     expect(entity.user).toEqual(user);
     expect(entity.isGuest).toBeFalsy();
     expect(entity.isSponsor).toBeFalsy();
-    expect(entity.sponsorValue).toBe(0);
+    expect(entity.sponsoredValue).toBe(0);
     expect(entity.type).toBe(MembersTypeEnum.COMMON);
     expect(entity.notifications).toEqual([]);
   });
@@ -54,6 +54,6 @@ describe("CommonMemberEntity", () => {
     expect(entity.isSponsor).toBeFalsy();
     expect(entity.notifications).toEqual([]);
     expect(entity.type).toBe(MembersTypeEnum.COMMON);
-    expect(entity.sponsorValue).toBe(0);
+    expect(entity.sponsoredValue).toBe(0);
   });
 });
