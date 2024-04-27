@@ -1,10 +1,10 @@
-import { CreateOutingUseCaseInterface } from "@/domain/usecases";
-import { CreateOutingRepositoryProtocol } from "../protocols/create-outing.repository.protocol";
+import { CreateOutingUseCaseInterface } from "@/application/protocols";
+import { CreateOutingRepositoryProtocol } from "@/domain/repositories/create-outing.repository.protocol";
 import { OutingEntity } from "@/domain/entities";
 import EitherFactory from "@/domain/shared/either";
 import { MembersTypeEnum } from "@/domain/shared/enum/members-type.enum";
 import { Params as CreateMemberParams } from "@/domain/factory/member.factory";
-import { FindUserByIdsRepositoryProtocol } from "../protocols/find-users-by-ids.repository.protocol";
+import { FindUserByIdsRepositoryProtocol } from "@/domain/repositories/find-users-by-ids.repository.protocol";
 
 export class CreateOutingUseCase implements CreateOutingUseCaseInterface {
   constructor(

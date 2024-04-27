@@ -1,4 +1,4 @@
-import { InsertOutingDAOProtocol } from "@/infrastructure/repositories/protocols/outing-insert.dao.protocol";
+import { InsertOutingDAOProtocol } from "@/persistence/repositories/protocols/outing-insert.dao.protocol";
 import { Pool, PoolClient } from "pg";
 
 export class OutingDAO implements InsertOutingDAOProtocol<PoolClient> {

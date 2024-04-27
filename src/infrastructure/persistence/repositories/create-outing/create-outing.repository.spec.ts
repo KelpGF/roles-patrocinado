@@ -1,19 +1,19 @@
 import { Pool, PoolClient } from "pg";
 import { InsertManyMemberDAOProtocol } from "../protocols/member-insert.dao.protocol";
 import { InsertOutingDAOProtocol } from "../protocols/outing-insert.dao.protocol";
-import { Database } from "@/infrastructure/database/connection.pg";
-import { MemberDAO } from "@/infrastructure/database/DAO/member.dao";
-import { OutingDAO } from "@/infrastructure/database/DAO/outing.dao";
+import { Database } from "@/persistence/database/connection.pg";
+import { MemberDAO } from "@/persistence/database/DAO/member.dao";
+import { OutingDAO } from "@/persistence/database/DAO/outing.dao";
 import MemberEntityAbstract from "@/domain/entities/member/member.entity.abstract";
 import MemberFactory from "@/domain/factory/member.factory";
 import { MembersTypeEnum } from "@/domain/shared/enum/members-type.enum";
 import { OutingEntity, UserEntity } from "@/domain/entities";
 import IdVo from "@/domain/shared/value-object/uuid.vo";
-import { CreateOutingRepositoryProtocol } from "@/application/protocols/create-outing.repository.protocol";
 import { CreateOutingRepository } from "./create-outing.repository";
 import { InfraError } from "@/domain/shared/errors";
-import { UnityOfWorkInterface } from "@/infrastructure/database/types/uow.interface";
-import { UnityOfWork } from "@/infrastructure/database/DAO/uow.dao";
+import { UnityOfWorkInterface } from "@/persistence/database/types/uow.interface";
+import { UnityOfWork } from "@/persistence/database/DAO/uow.dao";
+import { CreateOutingRepositoryProtocol } from "@/domain/repositories/create-outing.repository.protocol";
 
 describe("CreateOutingRepository", () => {
   let connection: Pool;

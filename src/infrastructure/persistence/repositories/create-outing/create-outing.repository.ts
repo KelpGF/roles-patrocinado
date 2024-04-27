@@ -1,7 +1,7 @@
-import { CreateOutingRepositoryProtocol } from "@/application/protocols/create-outing.repository.protocol";
+import { CreateOutingRepositoryProtocol } from "@/domain/repositories/create-outing.repository.protocol";
 import EitherFactory from "@/domain/shared/either";
 import { InfraError } from "@/domain/shared/errors";
-import { UnityOfWorkInterface } from "@/infrastructure/database/types/uow.interface";
+import { UnityOfWorkInterface } from "@/persistence/database/types/uow.interface";
 import { InsertManyMemberDAOProtocol } from "../protocols/member-insert.dao.protocol";
 import { InsertOutingDAOProtocol } from "../protocols/outing-insert.dao.protocol";
 

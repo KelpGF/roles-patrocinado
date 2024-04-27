@@ -1,4 +1,4 @@
-import { FindUserByIdsRepositoryProtocol } from "@/application/protocols/find-users-by-ids.repository.protocol";
+import { FindUserByIdsRepositoryProtocol } from "@/domain/repositories/find-users-by-ids.repository.protocol";
 import { UserDAOProtocol } from "../protocols/user.dao.protocol";
 import { UserEntity } from "@/domain/entities";
 

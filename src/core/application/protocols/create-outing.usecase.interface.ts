@@ -1,6 +1,6 @@
-import { Either } from "../shared/either";
-import { DomainError, InfraError } from "../shared/errors";
-import { UseCase } from "../shared/usecase";
+import { Either } from "@/domain/shared/either";
+import { DomainError, InfraError } from "@/domain/shared/errors";
+import { UseCase } from "./usecase.interface";
 
 export interface CreateOutingUseCaseInterface
   extends UseCase<

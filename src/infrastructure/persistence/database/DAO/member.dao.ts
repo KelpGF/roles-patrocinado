@@ -1,4 +1,4 @@
-import { InsertManyMemberDAOProtocol } from "@/infrastructure/repositories/protocols/member-insert.dao.protocol";
+import { InsertManyMemberDAOProtocol } from "@/persistence/repositories/protocols/member-insert.dao.protocol";
 import { Pool, PoolClient } from "pg";
 
 export class MemberDAO implements InsertManyMemberDAOProtocol<PoolClient> {

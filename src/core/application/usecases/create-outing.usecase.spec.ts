@@ -1,4 +1,4 @@
-import { CreateOutingUseCaseInterface } from "@/domain/usecases";
+import { CreateOutingUseCaseInterface } from "@/application/protocols";
 import { CreateOutingUseCase } from "./create-outing.usecase";
 import { UserEntity } from "@/domain/entities";
 import EitherFactory from "@/domain/shared/either";

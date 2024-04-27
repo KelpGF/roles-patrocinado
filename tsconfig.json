@@ -19,7 +19,9 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@/*": ["src/*"],
+      "@/domain/*": ["src/core/domain/*"],
+      "@/application/*": ["src/core/application/*"],
+      "@/persistence/*": ["src/infrastructure/persistence/*"],
     }
   },
   "include": [
